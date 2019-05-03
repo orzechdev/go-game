@@ -10,15 +10,18 @@
       <div class="cell-num">
         {{i}}
       </div>
-      <div v-for="j in 9" :key="`2${j}`" class="cell" @mouseover="mouseOver(i, j)" @mouseleave="mouseLeave(i, j)">
-        <div class="stone" v-show="items[i-1][j-1]"></div>
-        <!-- <v-btn
-          dark
-          fab
-          color="pink"
-          class="stone"
-          v-show="items[i-1][j-1]"
-        /> -->
+      <div v-for="j in 9" :key="`2${j}`" class="cell" 
+        @mouseover="mouseOver(i, j)" 
+        @mouseleave="mouseLeave(i, j)"
+        @click="click(i, j)">
+        <div 
+          class="stone" 
+          :class="{ 
+            'stone-white': values[i-1][j-1] === 1 || (currentColor === 1 && values[i-1][j-1] !== 2),
+            'stone-black': values[i-1][j-1] === 2 || (currentColor === 2 && values[i-1][j-1] !== 1)
+          }" 
+          v-show="values[i-1][j-1] === 1 || values[i-1][j-1] === 2 || hoverValues[i-1][j-1]">
+        </div>
       </div>
     </div>
   </div>
@@ -26,12 +29,25 @@
 
 <script>
 export default {
+  props: {
+    currentColor: {
+      type: Number,
+      required: true,
+    },
+    values: {
+      type: Array,
+      required: true,
+      validator: values => {
+        return values && values.length === 9 && values[0].length === 9
+      },
+    }
+  },
   data: () => ({
-    items: [
+    hoverValues: [
       [false,false,false,false,false,false,false,false,false,false,false,false,false],
       [false,false,false,false,false,false,false,false,false,false,false,false,false],
       [false,false,false,false,false,false,false,false,false,false,false,false,false],
-      [false,false,false,true,false,false,false,false,false,false,false,false,false],
+      [false,false,false,false,false,false,false,false,false,false,false,false,false],
       [false,false,false,false,false,false,false,false,false,false,false,false,false],
       [false,false,false,false,false,false,false,false,false,false,false,false,false],
       [false,false,false,false,false,false,false,false,false,false,false,false,false],
@@ -46,19 +62,24 @@ export default {
   methods: {
     mouseOver (i, j) {
       //make a copy of the row
-      const newRow = this.items[i-1].slice(0)
+      const newRow = this.hoverValues[i-1].slice(0)
       // update the value
       newRow[j-1] = true
       // update it in the grid
-      this.$set(this.items, i-1, newRow)
+      this.$set(this.hoverValues, i-1, newRow)
     },
     mouseLeave (i, j) {
       //make a copy of the row
-      const newRow = this.items[i-1].slice(0)
+      const newRow = this.hoverValues[i-1].slice(0)
       // update the value
       newRow[j-1] = false
       // update it in the grid
-      this.$set(this.items, i-1, newRow)
+      this.$set(this.hoverValues, i-1, newRow)
+    },
+    click (i, j) {
+      if (this.values[i-1][j-1] === 0) {
+        this.$emit('click', i, j)
+      }
     }
   }
 }
@@ -98,11 +119,16 @@ export default {
   width: 100%;
 }
 .stone{
-  background: #424242;
   width: 100%;
   height: 100%;
   position: relative;
   border-radius: 50%;
   box-shadow: 0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12);
+}
+.stone-white{
+  background: #ffffff;
+}
+.stone-black{
+  background: #424242;
 }
 </style>

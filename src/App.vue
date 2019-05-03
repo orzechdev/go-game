@@ -9,7 +9,7 @@
     </v-toolbar>
 
     <v-content>
-      <HelloWorld/>
+      <board-controller></board-controller>
     </v-content>
 
     <v-bottom-nav :active.sync="bottomNav" :value="true" fixed color="white">
@@ -27,16 +27,16 @@
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld";
+import BoardController from "./components/BoardController.vue";
 
 export default {
   name: "App",
   components: {
-    HelloWorld
+    BoardController
   },
   data() {
     return {
-      //
+      bottomNav: 'play'
     };
   }
 };
