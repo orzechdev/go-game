@@ -3,7 +3,7 @@
     <v-toolbar app dark color="primary">
       <v-toolbar-title class="headline text-uppercase">Vue Game</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn flat href="https://github.com/vuetifyjs/vuetify/releases/latest" target="_blank">
+      <v-btn flat href="https://github.com/orzechdev/vue-game/releases/latest" target="_blank">
         <span class="mr-2">Latest Release</span>
       </v-btn>
     </v-toolbar>
