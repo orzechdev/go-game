@@ -30,18 +30,18 @@ export default {
   },
   data: () => ({
     currentColor: 1,
-    values: //[[0,0,2,2,2,2,0,1,0],[0,0,0,2,0,2,2,1,2],[0,0,2,2,2,0,2,1,0],[0,2,2,0,0,2,0,2,0],[0,0,2,2,2,2,2,0,2],[0,0,0,0,2,2,0,2,2],[0,0,0,0,0,0,2,2,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0]]
-    [
-      [0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0],
-      [0,0,2,0,0,0,0,0,0],
-      [0,0,0,1,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0],
-    ],
+    values: [[0,0,0,0,0,0,0,0,0],[0,2,2,2,1,0,0,0,0],[0,2,2,0,2,1,0,0,0],[0,0,2,1,0,1,0,0,0],[0,0,1,0,1,0,0,0,0],[0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0]]
+    // [
+    //   [0,0,0,0,0,0,0,0,0],
+    //   [0,0,0,0,0,0,0,0,0],
+    //   [0,0,2,0,0,0,0,0,0],
+    //   [0,0,0,1,0,0,0,0,0],
+    //   [0,0,0,0,0,0,0,0,0],
+    //   [0,0,0,0,0,0,0,0,0],
+    //   [0,0,0,0,0,0,0,0,0],
+    //   [0,0,0,0,0,0,0,0,0],
+    //   [0,0,0,0,0,0,0,0,0],
+    // ],
   }),
   methods: {
     changeToWhite () {
@@ -133,7 +133,7 @@ export default {
         }
       }
       // Check right
-      if (xVal !== newValues[yVal].length) {
+      if (xVal !== newValues[yVal].length-1) {
         if (newValues[yVal][xVal+1] === opponentColor) {
           console.log(`p 2 val:${val} yVal:${yVal} xVal:${xVal}`)
           let [isSorrounded, obtainedValues] = this.evaluateOpponentValue(newValues, val, yVal, xVal+1, direction.LEFT, checkedValues)
@@ -145,7 +145,7 @@ export default {
         }
       }
       // Check bottom
-      if (yVal !== newValues.length) {
+      if (yVal !== newValues.length-1) {
         if (newValues[yVal+1][xVal] === opponentColor) {
           console.log(`p 3 val:${val} yVal:${yVal} xVal:${xVal}`)
           let [isSorrounded, obtainedValues] = this.evaluateOpponentValue(newValues, val, yVal+1, xVal, direction.TOP, checkedValues)
@@ -177,7 +177,7 @@ export default {
 
       const opponentColor = val === 1 ? 2 : 1;
       console.log(`eov val:${val} yVal:${yVal} xVal:${xVal} prevDirect:${prevDirection}`)
-      let evaluatedValues = newValues;
+      let evaluatedValues = newValues.map(arr => arr.slice());
 
       // Chack top
       if (yVal != 0 && prevDirection !== direction.TOP && checkedValuesMap[yVal-1][xVal] != 1) {
@@ -194,7 +194,7 @@ export default {
         }
       }
       // Check right
-      if (xVal !== evaluatedValues[yVal].length && prevDirection !== direction.RIGHT && checkedValuesMap[yVal][xVal+1] != 1) {
+      if (xVal !== evaluatedValues[yVal].length-1 && prevDirection !== direction.RIGHT && checkedValuesMap[yVal][xVal+1] != 1) {
         console.log(`eov val:${val} yVal:${yVal} xVal:${xVal} prevDirect:${prevDirection} 2`)
         if (evaluatedValues[yVal][xVal+1] === opponentColor) {
           let [isSorrounded, obtainedValues, checkedValuesObtained] = this.evaluateOpponentValue(evaluatedValues, val, yVal, xVal+1, direction.LEFT, checkedValuesMap)
@@ -208,7 +208,7 @@ export default {
         }
       }
       // Check bottom
-      if (yVal !== evaluatedValues.length && prevDirection !== direction.BOTTOM && checkedValuesMap[yVal+1][xVal] != 1) {
+      if (yVal !== evaluatedValues.length-1 && prevDirection !== direction.BOTTOM && checkedValuesMap[yVal+1][xVal] != 1) {
         console.log(`eov val:${val} yVal:${yVal} xVal:${xVal} prevDirect:${prevDirection} 3`)
         if (evaluatedValues[yVal+1][xVal] === opponentColor) {
           let [isSorrounded, obtainedValues, checkedValuesObtained] = this.evaluateOpponentValue(evaluatedValues, val, yVal+1, xVal, direction.TOP, checkedValuesMap)
