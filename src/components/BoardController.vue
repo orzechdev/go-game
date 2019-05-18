@@ -2,8 +2,13 @@
   <v-container>
     <v-layout text-xs-center wrap justify-space-around>
       <v-flex mb-5 xs12 sm10 md8 lg6>
-        <board :currentColor="currentColor" :values="values" @click="click">
+        <board 
+          :currentColor="currentColor" 
+          :values="values" 
+          @click="click">
         </board>
+        <v-btn color="white" @click="changeToWhite">White</v-btn>
+        <v-btn color="black" class="white-text" @click="changeToBlack">Black</v-btn>
       </v-flex>
     </v-layout>
   </v-container>
@@ -11,6 +16,13 @@
 
 <script>
 import Board from './Board.vue'
+
+const direction = {
+  TOP: 1,
+  RIGHT: 2,
+  BOTTOM: 3,
+  LEFT: 4
+}
 
 export default {
   components: {
@@ -31,6 +43,12 @@ export default {
     ],
   }),
   methods: {
+    changeToWhite () {
+      this.currentColor = 1
+    },
+    changeToBlack () {
+      this.currentColor = 2
+    },
     click (i, j) {
       //make a copy of the row
       const newRow = this.values[i-1].slice(0)
@@ -38,12 +56,164 @@ export default {
       newRow[j-1] = this.currentColor
       // update it in the grid
       this.$set(this.values, i-1, newRow)
+
+      let [currentValuesChanged, evaluatedValues] = this.evaluateBoard(this.values)
+
+      if (currentValuesChanged) {
+        this.values = evaluatedValues
+      }
       // Change current color
-      this.currentColor = this.currentColor === 1 ? 2 : 1
+      // this.currentColor = this.currentColor === 1 ? 2 : 1
+    },
+    /**
+     * Iterate over the whole board and removes sourrounded values if placed value in newValues shold cause it
+     */
+    evaluateBoard (newValues) {
+      let valuesAreChanged = false;
+      // Opponent values might be surrounded in more then one place, thus need to be calculated as much time as possible
+      do {
+        // Iterate over the whole board
+        for (let y = 0; y < newValues.length; y++) {
+          const row = newValues[y];
+          for (let x = 0; x < row.length; x++) {
+            const val = row[x];
+            if (val != 0) {
+              let [currentValuesChanged, evaluatedValues] = this.evaluateCurrentValue(newValues, val, y, x)
+              console.log(currentValuesChanged)
+              if (currentValuesChanged) {
+                // newValues = evaluatedValues;
+                return [true, evaluatedValues] // temp....
+                // break;
+              }
+            }          
+          }
+          // if (currentValuesChanged) {
+          //   break;
+          // }
+        }
+      } while (valuesAreChanged)
+      return [false, newValues]
+    },
+    /**
+     * Check if the current stone in given place is surrounded by opponent's stones
+     */
+    evaluateCurrentValue (newValues, val, yVal, xVal) {
+      const opponentColor = val === 1 ? 2 : 1;
+      let valuesAreChanged = false;
+      // Chack top
+      if (yVal != 0) {
+        if (newValues[yVal-1][xVal] === opponentColor) {
+          console.log(`p 1 val:${val} yVal:${yVal} xVal:${xVal}`)
+          let [isSorrounded, obtainedValues] = this.evaluateOpponentValue(newValues, val, yVal-1, xVal, direction.BOTTOM)
+          if (isSorrounded) {
+            valuesAreChanged = true;
+            console.log('pass 1')
+            newValues = obtainedValues;
+          }
+        }
+      }
+      // Check right
+      if (xVal !== newValues[yVal].length) {
+        if (newValues[yVal][xVal+1] === opponentColor) {
+          console.log(`p 2 val:${val} yVal:${yVal} xVal:${xVal}`)
+          let [isSorrounded, obtainedValues] = this.evaluateOpponentValue(newValues, val, yVal, xVal+1, direction.LEFT)
+          if (isSorrounded) {
+            valuesAreChanged = true;
+            console.log('pass 2')
+            newValues = obtainedValues;
+          }
+        }
+      }
+      // Check bottom
+      if (yVal !== newValues.length) {
+        if (newValues[yVal+1][xVal] === opponentColor) {
+          console.log(`p 3 val:${val} yVal:${yVal} xVal:${xVal}`)
+          let [isSorrounded, obtainedValues] = this.evaluateOpponentValue(newValues, val, yVal+1, xVal, direction.TOP)
+          if (isSorrounded) {
+            valuesAreChanged = true;
+            console.log('pass 3')
+            newValues = obtainedValues;
+          }
+        }
+      }
+      // Check left
+      if (xVal != 0) {
+        if (newValues[yVal][xVal-1] === opponentColor) {
+          console.log(`p 4 val:${val} yVal:${yVal} xVal:${xVal}`)
+          let [isSorrounded, obtainedValues] = this.evaluateOpponentValue(newValues, val, yVal, xVal-1, direction.RIGHT)
+          if (isSorrounded) {
+            valuesAreChanged = true;
+            console.log('pass 4')
+            newValues = obtainedValues;
+          }
+        }
+      }
+      // Resluting Values after current value is placed
+      return [valuesAreChanged, newValues]; 
+    },
+    evaluateOpponentValue (newValues, val, yVal, xVal, prevDirection) {
+      const opponentColor = val === 1 ? 2 : 1;
+      console.log(`eov val:${val} yVal:${yVal} xVal:${xVal} prevDirect:${prevDirection}`)
+      let evaluatedValues = newValues;
+      // Chack top
+      if (yVal != 0 && prevDirection !== direction.TOP) {
+        if (evaluatedValues[yVal-1][xVal] === val) {
+          let [isSorrounded, obtainedValues] = this.evaluateOpponentValue(evaluatedValues, val, yVal-1, xVal, direction.BOTTOM)
+          if (!isSorrounded) {
+            return [false, newValues];
+          }
+          evaluatedValues = obtainedValues;
+        } else {
+          return [false, newValues];
+        }
+      }
+      // Check right
+      if (xVal !== evaluatedValues[yVal].length && prevDirection !== direction.RIGHT) {
+        if (evaluatedValues[yVal][xVal+1] === val) {
+          let [isSorrounded, obtainedValues] = this.evaluateOpponentValue(evaluatedValues, val, yVal, xVal+1, direction.LEFT)
+          if (!isSorrounded) {
+            return [false, newValues];
+          }
+          evaluatedValues = obtainedValues;
+        } else {
+          return [false, newValues];
+        }
+      }
+      // Check bottom
+      if (yVal !== evaluatedValues.length && prevDirection !== direction.BOTTOM) {
+        if (evaluatedValues[yVal+1][xVal] === val) {
+          let [isSorrounded, obtainedValues] = this.evaluateOpponentValue(evaluatedValues, val, yVal+1, xVal, direction.TOP)
+          if (!isSorrounded) {
+            return [false, newValues];
+          }
+          evaluatedValues = obtainedValues;
+        } else {
+          return [false, newValues];
+        }
+      }
+      // Check left
+      if (xVal != 0 && prevDirection !== direction.LEFT) {
+        if (evaluatedValues[yVal][xVal-1] === val) {
+          let [isSorrounded, obtainedValues] = this.evaluateOpponentValue(evaluatedValues, val, yVal, xVal-1, direction.RIGHT)
+          if (!isSorrounded) {
+            return [false, newValues];
+          }
+          evaluatedValues = obtainedValues;
+        } else {
+          return [false, newValues];
+        }
+      }
+      // If opponent is surrounded
+      evaluatedValues[yVal][xVal] = 0;
+      console.log(evaluatedValues)
+      return [true, evaluatedValues];
     }
   }
 };
 </script>
 
 <style>
+  .white-text {
+    color: white !important;
+  }
 </style>
