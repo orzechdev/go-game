@@ -9,7 +9,22 @@
     </v-toolbar>
 
     <v-content>
-      <board-controller></board-controller>
+      <board-controller
+        @onFinishGame="onFinishGame"
+        ref="boardControllerRef">
+      </board-controller>
+
+      <v-dialog v-model="finishDialog" max-width="290">
+        <v-card>
+          <v-card-title class="headline">{{finishDialogTitle}}</v-card-title>
+          <v-card-text>{{finishDialogDescription}}</v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn flat @click="finishDialog = false">Close</v-btn>
+            <v-btn flat color="primary" @click="onClickEmptyBoard">Empty board</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-content>
 
     <v-bottom-nav :active.sync="bottomNav" :value="true" fixed color="white">
@@ -36,8 +51,28 @@ export default {
   },
   data() {
     return {
-      bottomNav: 'play'
+      bottomNav: 'play',
+      finishDialog: false,
+      finishDialogTitle: '',
+      finishDialogDescription: ''
     };
+  },
+  methods: {
+    onFinishGame (whitePoints, blackPoints) {
+      this.finishDialog = true
+      if (whitePoints > blackPoints) {
+        this.finishDialogTitle = 'White stones won!'
+      } else if (whitePoints < blackPoints) {
+        this.finishDialogTitle = 'Black stones won!'
+      } else {
+        this.finishDialogTitle = 'Tie!'
+      }
+      this.finishDialogDescription = `Black points: ${blackPoints}, white points: ${whitePoints}`
+    },
+    onClickEmptyBoard () {
+      this.$refs.boardControllerRef.emptyBoard()
+      this.finishDialog = false
+    }
   }
 };
 </script>
