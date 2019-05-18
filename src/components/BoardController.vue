@@ -30,18 +30,18 @@ export default {
   },
   data: () => ({
     currentColor: 1,
-    values: [[0,0,0,0,0,0,0,0,0],[0,2,2,2,1,0,0,0,0],[0,2,2,0,2,1,0,0,0],[0,0,2,1,0,1,0,0,0],[0,0,1,0,1,0,0,0,0],[0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0]]
-    // [
-    //   [0,0,0,0,0,0,0,0,0],
-    //   [0,0,0,0,0,0,0,0,0],
-    //   [0,0,2,0,0,0,0,0,0],
-    //   [0,0,0,1,0,0,0,0,0],
-    //   [0,0,0,0,0,0,0,0,0],
-    //   [0,0,0,0,0,0,0,0,0],
-    //   [0,0,0,0,0,0,0,0,0],
-    //   [0,0,0,0,0,0,0,0,0],
-    //   [0,0,0,0,0,0,0,0,0],
-    // ],
+    values: //[[0,0,0,0,0,0,0,0,0],[0,2,2,2,1,0,0,0,0],[0,2,2,0,2,1,0,0,0],[0,0,2,1,0,1,0,0,0],[0,0,1,0,1,0,0,0,0],[0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0]]
+    [
+      [0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0],
+      [0,0,2,0,0,0,0,0,0],
+      [0,0,0,1,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0],
+    ],
   }),
   methods: {
     changeToWhite () {
@@ -66,7 +66,7 @@ export default {
         this.values = evaluatedValues
       }
       // Change current color
-      // this.currentColor = this.currentColor === 1 ? 2 : 1
+      this.currentColor = this.currentColor === 1 ? 2 : 1
     },
     /**
      * Iterate over the whole board and removes sourrounded values if placed value in newValues shold cause it
@@ -171,6 +171,7 @@ export default {
       // Resluting Values after current value is placed
       return [valuesAreChanged, newValues]; 
     },
+    // If it will be refactored, probably possible to remove prevDirection and use just checkedValues
     evaluateOpponentValue (newValues, val, yVal, xVal, prevDirection, checkedValues) {
       let checkedValuesMap = checkedValues.map(arr => arr.slice());
       checkedValuesMap[yVal][xVal] = 1;
