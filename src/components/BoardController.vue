@@ -157,49 +157,49 @@ export default {
       let evaluatedValues = newValues;
       // Chack top
       if (yVal != 0 && prevDirection !== direction.TOP) {
-        if (evaluatedValues[yVal-1][xVal] === val) {
+        if (evaluatedValues[yVal-1][xVal] === opponentColor) {
           let [isSorrounded, obtainedValues] = this.evaluateOpponentValue(evaluatedValues, val, yVal-1, xVal, direction.BOTTOM)
           if (!isSorrounded) {
             return [false, newValues];
           }
           evaluatedValues = obtainedValues;
-        } else {
+        } else if (evaluatedValues[yVal-1][xVal] === 0) {
           return [false, newValues];
         }
       }
       // Check right
       if (xVal !== evaluatedValues[yVal].length && prevDirection !== direction.RIGHT) {
-        if (evaluatedValues[yVal][xVal+1] === val) {
+        if (evaluatedValues[yVal][xVal+1] === opponentColor) {
           let [isSorrounded, obtainedValues] = this.evaluateOpponentValue(evaluatedValues, val, yVal, xVal+1, direction.LEFT)
           if (!isSorrounded) {
             return [false, newValues];
           }
           evaluatedValues = obtainedValues;
-        } else {
+        } else if (evaluatedValues[yVal][xVal+1] === 0) {
           return [false, newValues];
         }
       }
       // Check bottom
       if (yVal !== evaluatedValues.length && prevDirection !== direction.BOTTOM) {
-        if (evaluatedValues[yVal+1][xVal] === val) {
+        if (evaluatedValues[yVal+1][xVal] === opponentColor) {
           let [isSorrounded, obtainedValues] = this.evaluateOpponentValue(evaluatedValues, val, yVal+1, xVal, direction.TOP)
           if (!isSorrounded) {
             return [false, newValues];
           }
           evaluatedValues = obtainedValues;
-        } else {
+        } else if (evaluatedValues[yVal+1][xVal] === 0) {
           return [false, newValues];
         }
       }
       // Check left
       if (xVal != 0 && prevDirection !== direction.LEFT) {
-        if (evaluatedValues[yVal][xVal-1] === val) {
+        if (evaluatedValues[yVal][xVal-1] === opponentColor) {
           let [isSorrounded, obtainedValues] = this.evaluateOpponentValue(evaluatedValues, val, yVal, xVal-1, direction.RIGHT)
           if (!isSorrounded) {
             return [false, newValues];
           }
           evaluatedValues = obtainedValues;
-        } else {
+        } else if (evaluatedValues[yVal][xVal-1] === 0) {
           return [false, newValues];
         }
       }
