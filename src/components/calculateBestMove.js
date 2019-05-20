@@ -4,11 +4,11 @@ import { colors } from "./boardConsts";
 import { checkCurrentPoints } from "./boardCurrentEvaluation";
 
 /**
- * Returned object with outcome, x and y where player should set stone 
+ * Returns object with outcome, x and y where player should set stone 
  * to potentially obtain best results calculated by min-max algorithm 
  */
 export const calculateMinMaxMove = (currValues, playerColor, depth = 1) => {
-  calculateBestMove(currValues, playerColor, depth * 2)
+  return calculateBestMove(currValues, playerColor, depth * 2)
 }
 
 /**
@@ -19,7 +19,7 @@ const calculateBestMove = (currValues, playerColor, depthIteration) => {
 
   const bestResult = movesOutcomes.reduce((prev, current) => 
     (prev.outcome > current.outcome) ? prev : current
-  ).values;
+  );
 
   return bestResult;
 }
@@ -31,7 +31,7 @@ const calculateWorstCountermove = (currValues, playerColor, depthIteration) => {
 
   const worstCounterresult = movesOutcomes.reduce((prev, current) => 
     (prev.outcome < current.outcome) ? prev : current
-  ).values;
+  );
 
   return worstCounterresult;
 }

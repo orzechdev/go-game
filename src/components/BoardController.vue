@@ -24,6 +24,7 @@ import Board from './Board.vue'
 import { direction } from "./boardConsts";
 import { evaluateBoard } from "./boardStateEvaluation";
 import { isGameFinished, checkFinalPoints } from "./boardFinishEvaluation";
+import { calculateMinMaxMove } from "./calculateBestMove"
 
 export default {
   components: {
@@ -72,13 +73,47 @@ export default {
         this.values = evaluatedValues
       }
       // Change current color
-      this.currentColor = this.currentColor === 1 ? 2 : 1
+      // this.currentColor = this.currentColor === 1 ? 2 : 1
 
       if (isGameFinished(this.values)) {
         console.log('GAME FINISHED')
         const [whitePoints, blackPoints] = checkFinalPoints(this.values)
         console.log(`white points: ${whitePoints}, black points: ${blackPoints}`)
         this.onFinishGame(whitePoints, blackPoints)
+      } else {
+        let valuesToCalculate = this.values.map(arr => arr.slice())
+
+        const opponentColor = this.currentColor === 1 ? 2 : 1
+
+        /**
+         * TODO: calculateMinMaxMove returns nothing - its wrong...
+         */
+        const {outcome, y, x} = calculateMinMaxMove(valuesToCalculate, opponentColor)
+
+        console.log(`calculateMinMaxMove - outcome:${outcome} y:${y} x:${x}`)
+
+        // TODO: uncomment, maybe change smth if needed...
+        // //make a copy of the row
+        // const anotherNewRow = this.values[y-1].slice(0)
+        // // update the value
+        // anotherNewRow[x-1] = opponentColor
+        // // update it in the grid
+        // this.$set(this.values, y-1, anotherNewRow)
+
+        // valuesToEvaluate = this.values.map(arr => arr.slice())
+
+        // let [currentValuesChanged, evaluatedValues] = evaluateBoard(valuesToCalculate)
+
+        // if (currentValuesChanged) {
+        //   this.values = evaluatedValues
+        // }
+
+        // if (isGameFinished(this.values)) {
+        //   console.log('GAME FINISHED')
+        //   const [whitePoints, blackPoints] = checkFinalPoints(this.values)
+        //   console.log(`white points: ${whitePoints}, black points: ${blackPoints}`)
+        //   this.onFinishGame(whitePoints, blackPoints)
+        // }
       }
     },
     onFinishGame (whitePoints, blackPoints) {
