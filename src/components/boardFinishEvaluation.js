@@ -134,11 +134,11 @@ const checkFinalFieldPoint = (newValues, val, yVal, xVal) => {
     } 
     // Check bottom
     else if (yVal !== newValues.length-1) {
-      return newValues[yVal][xVal+1] === 1 ? 1 : 2
+      return newValues[yVal+1][xVal] === 1 ? 1 : 2
     } 
     // Check left
     else if (xVal != 0) {
-      return newValues[yVal][xVal+1] === 1 ? 1 : 2
+      return newValues[yVal][xVal-1] === 1 ? 1 : 2
     }
   }
 }
