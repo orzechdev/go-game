@@ -58,22 +58,6 @@ export default {
       this.currentColor = 2
     },
     click (i, j) {
-      // //make a copy of the row
-      // const newRow = this.values[i-1].slice(0)
-      // // update the value
-      // newRow[j-1] = this.currentColor
-      // // update it in the grid
-      // this.$set(this.values, i-1, newRow)
-
-      // let valuesToEvaluate = this.values.map(arr => arr.slice())
-
-      // let [currentValuesChanged, evaluatedValues] = evaluateBoard(valuesToEvaluate)
-
-      // if (currentValuesChanged) {
-      //   this.values = evaluatedValues
-      // }
-      // // Change current color
-      // // this.currentColor = this.currentColor === 1 ? 2 : 1
       this.placeStoneAndEvaluate(this.currentColor, i, j)
 
       if (isGameFinished(this.values)) {
@@ -86,30 +70,11 @@ export default {
 
         const opponentColor = this.currentColor === 1 ? 2 : 1
 
-        /**
-         * TODO: calculateMinMaxMove returns nothing - its wrong...
-         */
         const {outcome, y, x} = calculateMinMaxMove(valuesToCalculate, opponentColor)
 
         console.log(`calculateMinMaxMove - outcome:${outcome} y:${y} x:${x}`)
 
         this.placeStoneAndEvaluate(opponentColor, y+1, x+1)
-
-        // // TODO: uncomment, maybe change smth if needed...
-        // //make a copy of the row
-        // const anotherNewRow = this.values[y-1].slice(0)
-        // // update the value
-        // anotherNewRow[x-1] = opponentColor
-        // // update it in the grid
-        // this.$set(this.values, y-1, anotherNewRow)
-
-        // valuesToEvaluate = this.values.map(arr => arr.slice())
-
-        // let [currentValuesChangedByOpponent, evaluatedValuesByOpponent] = evaluateBoard(valuesToCalculate)
-
-        // if (currentValuesChangedByOpponent) {
-        //   this.values = evaluatedValuesByOpponent
-        // }
 
         if (isGameFinished(this.values)) {
           console.log('GAME FINISHED')
@@ -120,6 +85,7 @@ export default {
       }
     },
     placeStoneAndEvaluate(color, i, j) {
+      //make a copy of the row
       const newRow = this.values[i-1].slice(0)
       // update the value
       newRow[j-1] = color
