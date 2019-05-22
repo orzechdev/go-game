@@ -17,7 +17,16 @@ export const calculateMinMaxMove = (currValues, playerColor, depth = 1) => {
 const calculateBestMove = (currValues, playerColor, depthIteration) => {
   const movesOutcomes = calculateMovesOutcomes(currValues, playerColor, depthIteration)
 
-  const bestResult = movesOutcomes.reduce((prev, current) => 
+  // console.log('ACHTUNG BEST');
+  // console.log(movesOutcomes);//{outcome: -1000, y: 5, x: 5}//
+
+  const bestRowResult = movesOutcomes.map(row => 
+    row.reduce((prev, current) => 
+      (prev.outcome > current.outcome) ? prev : current
+    )
+  )
+
+  const bestResult = bestRowResult.reduce((prev, current) => 
     (prev.outcome > current.outcome) ? prev : current
   );
 
@@ -29,9 +38,24 @@ const calculateBestMove = (currValues, playerColor, depthIteration) => {
 const calculateWorstCountermove = (currValues, playerColor, depthIteration) => {
   const movesOutcomes = calculateMovesOutcomes(currValues, playerColor, depthIteration)
 
-  const worstCounterresult = movesOutcomes.reduce((prev, current) => 
+  // console.log('ACHTUNG WORST');
+  // console.log(movesOutcomes);//{outcome: -1000, y: 5, x: 5}//
+
+  const worsrRowCounterresult = movesOutcomes.map(row =>
+    row.reduce((prev, current) => 
+      (prev.outcome < current.outcome) ? prev : current
+    )
+  );
+
+  // console.log('ACHTUNG 2');
+  // console.log(worsrRowCounterresult);//{outcome: -1000, y: 5, x: 5}//
+
+  const worstCounterresult = worsrRowCounterresult.reduce((prev, current) => 
     (prev.outcome < current.outcome) ? prev : current
   );
+
+  // console.log('ACHTUNG 3');
+  // console.log(worstCounterresult);//{outcome: -1000, y: 5, x: 5}//
 
   return worstCounterresult;
 }
@@ -115,11 +139,13 @@ const calculateMoveMaxOutcome = (newValues, playerColor, y, x, depthIteration) =
   if (isEvenIteration(depthIteration)) {
     const newDepthIteration = depthIteration - 1;
     const opponentColor = playerColor === colors.WHITE ? colors.BLACK : colors.WHITE
-    return calculateWorstCountermove(newValues, opponentColor, newDepthIteration)
+    const calculatedNextMove = calculateWorstCountermove(newValues, opponentColor, newDepthIteration)
+    return {outcome: calculatedNextMove.outcome, y: y, x: x}
   } else {
     const newDepthIteration = depthIteration - 1;
     const currentColor = playerColor === colors.WHITE ? colors.BLACK : colors.WHITE
-    return calculateBestMove(newValues, currentColor, newDepthIteration);
+    const calculatedNextMove = calculateBestMove(newValues, currentColor, newDepthIteration);
+    return {outcome: calculatedNextMove.outcome, y: y, x: x}
   }
 }
 

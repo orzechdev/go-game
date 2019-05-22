@@ -88,7 +88,8 @@ export default {
 <style lang="scss" scoped>
 .board {
   width: 100%;
-  height: 100%;
+  // height: 100%;
+  margin-bottom: 60px;
 }
 .row {
   width: 100%;

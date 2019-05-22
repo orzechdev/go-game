@@ -17,7 +17,7 @@ export const evaluateBoard = (newValues) => {
         if (val != 0) {
           let [currentValuesChanged, evaluatedValues] = evaluateCurrentValue(newValues, val, y, x)
           isChanged = currentValuesChanged;
-          console.log(currentValuesChanged)
+          // console.log(currentValuesChanged)
           if (currentValuesChanged) {
             valuesWereChanged = true;
             valuesAreChanged = true;
@@ -55,11 +55,11 @@ const evaluateCurrentValue = (newValues, val, yVal, xVal) => {
   // Chack top
   if (yVal != 0) {
     if (newValues[yVal-1][xVal] === opponentColor) {
-      console.log(`p 1 val:${val} yVal:${yVal} xVal:${xVal}`)
+      // console.log(`p 1 val:${val} yVal:${yVal} xVal:${xVal}`)
       let [isSorrounded, obtainedValues] = evaluateOpponentValue(newValues, val, yVal-1, xVal, direction.BOTTOM, checkedValues)
       if (isSorrounded) {
         valuesAreChanged = true;
-        console.log('pass 1')
+        // console.log('pass 1')
         newValues = obtainedValues;
       }
     }
@@ -67,11 +67,11 @@ const evaluateCurrentValue = (newValues, val, yVal, xVal) => {
   // Check right
   if (xVal !== newValues[yVal].length-1) {
     if (newValues[yVal][xVal+1] === opponentColor) {
-      console.log(`p 2 val:${val} yVal:${yVal} xVal:${xVal}`)
+      // console.log(`p 2 val:${val} yVal:${yVal} xVal:${xVal}`)
       let [isSorrounded, obtainedValues] = evaluateOpponentValue(newValues, val, yVal, xVal+1, direction.LEFT, checkedValues)
       if (isSorrounded) {
         valuesAreChanged = true;
-        console.log('pass 2')
+        // console.log('pass 2')
         newValues = obtainedValues;
       }
     }
@@ -79,11 +79,11 @@ const evaluateCurrentValue = (newValues, val, yVal, xVal) => {
   // Check bottom
   if (yVal !== newValues.length-1) {
     if (newValues[yVal+1][xVal] === opponentColor) {
-      console.log(`p 3 val:${val} yVal:${yVal} xVal:${xVal}`)
+      // console.log(`p 3 val:${val} yVal:${yVal} xVal:${xVal}`)
       let [isSorrounded, obtainedValues] = evaluateOpponentValue(newValues, val, yVal+1, xVal, direction.TOP, checkedValues)
       if (isSorrounded) {
         valuesAreChanged = true;
-        console.log('pass 3')
+        // console.log('pass 3')
         newValues = obtainedValues;
       }
     }
@@ -91,11 +91,11 @@ const evaluateCurrentValue = (newValues, val, yVal, xVal) => {
   // Check left
   if (xVal != 0) {
     if (newValues[yVal][xVal-1] === opponentColor) {
-      console.log(`p 4 val:${val} yVal:${yVal} xVal:${xVal}`)
+      // console.log(`p 4 val:${val} yVal:${yVal} xVal:${xVal}`)
       let [isSorrounded, obtainedValues] = evaluateOpponentValue(newValues, val, yVal, xVal-1, direction.RIGHT, checkedValues)
       if (isSorrounded) {
         valuesAreChanged = true;
-        console.log('pass 4')
+        // console.log('pass 4')
         newValues = obtainedValues;
       }
     }
@@ -110,12 +110,12 @@ const evaluateOpponentValue = (newValues, val, yVal, xVal, prevDirection, checke
   checkedValuesMap[yVal][xVal] = 1;
 
   const opponentColor = val === 1 ? 2 : 1;
-  console.log(`eov val:${val} yVal:${yVal} xVal:${xVal} prevDirect:${prevDirection}`)
+  // console.log(`eov val:${val} yVal:${yVal} xVal:${xVal} prevDirect:${prevDirection}`)
   let evaluatedValues = newValues.map(arr => arr.slice());
 
   // Chack top
   if (yVal != 0 && prevDirection !== direction.TOP && checkedValuesMap[yVal-1][xVal] != 1) {
-    console.log(`eov val:${val} yVal:${yVal} xVal:${xVal} prevDirect:${prevDirection} 1`)
+    // console.log(`eov val:${val} yVal:${yVal} xVal:${xVal} prevDirect:${prevDirection} 1`)
     if (evaluatedValues[yVal-1][xVal] === opponentColor) {
       let [isSorrounded, obtainedValues, checkedValuesObtained] = evaluateOpponentValue(evaluatedValues, val, yVal-1, xVal, direction.BOTTOM, checkedValuesMap)
       if (!isSorrounded) {
@@ -129,7 +129,7 @@ const evaluateOpponentValue = (newValues, val, yVal, xVal, prevDirection, checke
   }
   // Check right
   if (xVal !== evaluatedValues[yVal].length-1 && prevDirection !== direction.RIGHT && checkedValuesMap[yVal][xVal+1] != 1) {
-    console.log(`eov val:${val} yVal:${yVal} xVal:${xVal} prevDirect:${prevDirection} 2`)
+    // console.log(`eov val:${val} yVal:${yVal} xVal:${xVal} prevDirect:${prevDirection} 2`)
     if (evaluatedValues[yVal][xVal+1] === opponentColor) {
       let [isSorrounded, obtainedValues, checkedValuesObtained] = evaluateOpponentValue(evaluatedValues, val, yVal, xVal+1, direction.LEFT, checkedValuesMap)
       if (!isSorrounded) {
@@ -143,7 +143,7 @@ const evaluateOpponentValue = (newValues, val, yVal, xVal, prevDirection, checke
   }
   // Check bottom
   if (yVal !== evaluatedValues.length-1 && prevDirection !== direction.BOTTOM && checkedValuesMap[yVal+1][xVal] != 1) {
-    console.log(`eov val:${val} yVal:${yVal} xVal:${xVal} prevDirect:${prevDirection} 3`)
+    // console.log(`eov val:${val} yVal:${yVal} xVal:${xVal} prevDirect:${prevDirection} 3`)
     if (evaluatedValues[yVal+1][xVal] === opponentColor) {
       let [isSorrounded, obtainedValues, checkedValuesObtained] = evaluateOpponentValue(evaluatedValues, val, yVal+1, xVal, direction.TOP, checkedValuesMap)
       if (!isSorrounded) {
@@ -157,7 +157,7 @@ const evaluateOpponentValue = (newValues, val, yVal, xVal, prevDirection, checke
   }
   // Check left
   if (xVal != 0 && prevDirection !== direction.LEFT && checkedValuesMap[yVal][xVal-1] != 1) {
-    console.log(`eov val:${val} yVal:${yVal} xVal:${xVal} prevDirect:${prevDirection} 4`)
+    // console.log(`eov val:${val} yVal:${yVal} xVal:${xVal} prevDirect:${prevDirection} 4`)
     if (evaluatedValues[yVal][xVal-1] === opponentColor) {
       let [isSorrounded, obtainedValues, checkedValuesObtained] = evaluateOpponentValue(evaluatedValues, val, yVal, xVal-1, direction.RIGHT, checkedValuesMap)
       if (!isSorrounded) {
@@ -171,6 +171,6 @@ const evaluateOpponentValue = (newValues, val, yVal, xVal, prevDirection, checke
   }
   // If opponent is surrounded
   evaluatedValues[yVal][xVal] = 0;
-  console.log(evaluatedValues)
+  // console.log(evaluatedValues)
   return [true, evaluatedValues, checkedValuesMap];
 }

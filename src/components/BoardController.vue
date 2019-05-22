@@ -11,7 +11,7 @@
           <v-btn color="white" @click="changeToWhite">White</v-btn>
           <v-btn color="black" class="white-text" @click="changeToBlack">Black</v-btn>
         </v-flex>
-        <v-flex class="button-container">
+        <v-flex class="button-container margin-bottom">
           <v-btn @click="emptyBoard">Empty board</v-btn>
         </v-flex>
       </v-flex>
@@ -58,22 +58,23 @@ export default {
       this.currentColor = 2
     },
     click (i, j) {
-      //make a copy of the row
-      const newRow = this.values[i-1].slice(0)
-      // update the value
-      newRow[j-1] = this.currentColor
-      // update it in the grid
-      this.$set(this.values, i-1, newRow)
+      // //make a copy of the row
+      // const newRow = this.values[i-1].slice(0)
+      // // update the value
+      // newRow[j-1] = this.currentColor
+      // // update it in the grid
+      // this.$set(this.values, i-1, newRow)
 
-      let valuesToEvaluate = this.values.map(arr => arr.slice())
+      // let valuesToEvaluate = this.values.map(arr => arr.slice())
 
-      let [currentValuesChanged, evaluatedValues] = evaluateBoard(valuesToEvaluate)
+      // let [currentValuesChanged, evaluatedValues] = evaluateBoard(valuesToEvaluate)
 
-      if (currentValuesChanged) {
-        this.values = evaluatedValues
-      }
-      // Change current color
-      // this.currentColor = this.currentColor === 1 ? 2 : 1
+      // if (currentValuesChanged) {
+      //   this.values = evaluatedValues
+      // }
+      // // Change current color
+      // // this.currentColor = this.currentColor === 1 ? 2 : 1
+      this.placeStoneAndEvaluate(this.currentColor, i, j)
 
       if (isGameFinished(this.values)) {
         console.log('GAME FINISHED')
@@ -92,7 +93,9 @@ export default {
 
         console.log(`calculateMinMaxMove - outcome:${outcome} y:${y} x:${x}`)
 
-        // TODO: uncomment, maybe change smth if needed...
+        this.placeStoneAndEvaluate(opponentColor, y+1, x+1)
+
+        // // TODO: uncomment, maybe change smth if needed...
         // //make a copy of the row
         // const anotherNewRow = this.values[y-1].slice(0)
         // // update the value
@@ -102,18 +105,36 @@ export default {
 
         // valuesToEvaluate = this.values.map(arr => arr.slice())
 
-        // let [currentValuesChanged, evaluatedValues] = evaluateBoard(valuesToCalculate)
+        // let [currentValuesChangedByOpponent, evaluatedValuesByOpponent] = evaluateBoard(valuesToCalculate)
 
-        // if (currentValuesChanged) {
-        //   this.values = evaluatedValues
+        // if (currentValuesChangedByOpponent) {
+        //   this.values = evaluatedValuesByOpponent
         // }
 
-        // if (isGameFinished(this.values)) {
-        //   console.log('GAME FINISHED')
-        //   const [whitePoints, blackPoints] = checkFinalPoints(this.values)
-        //   console.log(`white points: ${whitePoints}, black points: ${blackPoints}`)
-        //   this.onFinishGame(whitePoints, blackPoints)
-        // }
+        if (isGameFinished(this.values)) {
+          console.log('GAME FINISHED')
+          const [whitePoints, blackPoints] = checkFinalPoints(this.values)
+          console.log(`white points: ${whitePoints}, black points: ${blackPoints}`)
+          this.onFinishGame(whitePoints, blackPoints)
+        }
+      }
+    },
+    placeStoneAndEvaluate(color, i, j) {
+      const newRow = this.values[i-1].slice(0)
+      // update the value
+      newRow[j-1] = color
+      // update it in the grid
+      this.$set(this.values, i-1, newRow)
+
+      let valuesToEvaluate = this.values.map(arr => arr.slice())
+
+      let [currentValuesChanged, evaluatedValues] = evaluateBoard(valuesToEvaluate)
+
+      console.log("EVALUATED VALUES")
+      console.log(evaluatedValues)
+
+      if (currentValuesChanged) {
+        this.values = evaluatedValues
       }
     },
     onFinishGame (whitePoints, blackPoints) {
@@ -141,5 +162,8 @@ export default {
   }
   .button-container {
     margin-bottom: 30px;
+  }
+  .margin-bottom {
+    margin-bottom: 80px;
   }
 </style>

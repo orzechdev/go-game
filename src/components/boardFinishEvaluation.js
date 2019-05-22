@@ -27,6 +27,7 @@ export const isFieldDetermined = (newValues, val, yVal, xVal) => {
 }
 
 export const isFieldSurroundedByJustOneColor = (newValues, val, yVal, xVal) => {
+  let isNeighborChecked = false;
   let isWhiteNeighbor = false;
   let isBlackNeighbor = false;
   // Check top
@@ -38,54 +39,58 @@ export const isFieldSurroundedByJustOneColor = (newValues, val, yVal, xVal) => {
     } else {
       isBlackNeighbor = true;
     }
+    isNeighborChecked = true;
   }
   // Check right
   if (xVal !== newValues[yVal].length-1) {
     if (newValues[yVal][xVal+1] === 0) {
       return false;
     } else if (newValues[yVal][xVal+1] === 1) {
-      if (isBlackNeighbor) {
+      if (isNeighborChecked && isBlackNeighbor) {
         return false;
       }
       isWhiteNeighbor = true;
     } else {
-      if (isWhiteNeighbor) {
+      if (isNeighborChecked && isWhiteNeighbor) {
         return false;
       }
       isBlackNeighbor = true;
     }
+    isNeighborChecked = true;
   }
   // Check bottom
   if (yVal !== newValues.length-1) {
     if (newValues[yVal+1][xVal] === 0) {
       return false;
     } else if (newValues[yVal+1][xVal] === 1) {
-      if (isBlackNeighbor) {
+      if (isNeighborChecked && isBlackNeighbor) {
         return false;
       }
       isWhiteNeighbor = true;
     } else {
-      if (isWhiteNeighbor) {
+      if (isNeighborChecked && isWhiteNeighbor) {
         return false;
       }
       isBlackNeighbor = true;
     }
+    isNeighborChecked = true;
   }
   // Check left
   if (xVal != 0) {
     if (newValues[yVal][xVal-1] === 0) {
       return false;
     } else if (newValues[yVal][xVal-1] === 1) {
-      if (isBlackNeighbor) {
+      if (isNeighborChecked && isBlackNeighbor) {
         return false;
       }
-      isWhiteNeighbor = true;
+      // isWhiteNeighbor = true; // ALGORITHM OPTIMIZATION - not used assignment
     } else {
-      if (isWhiteNeighbor) {
+      if (isNeighborChecked && isWhiteNeighbor) {
         return false;
       }
-      isBlackNeighbor = true;
+      // isBlackNeighbor = true; // ALGORITHM OPTIMIZATION - not used assignment
     }
+    // isNeighborChecked = true; // ALGORITHM OPTIMIZATION - not used assignment
   }
   // If anywhere around there is no empty fields - say it is determined
   return true;
