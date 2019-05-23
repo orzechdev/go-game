@@ -70,7 +70,7 @@ export default {
 
         const opponentColor = this.currentColor === 1 ? 2 : 1
 
-        const {outcome, y, x} = calculateMinMaxMove(valuesToCalculate, opponentColor)
+        const {outcome, y, x} = calculateMinMaxMove(valuesToCalculate, opponentColor, 2)
 
         console.log(`calculateMinMaxMove - outcome:${outcome} y:${y} x:${x}`)
 

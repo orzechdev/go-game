@@ -61,3 +61,32 @@ const checkCurrentFieldPoint = (newValues, val, yVal, xVal) => {
     return surroundedColorCheck;
   }
 }
+
+export const isFieldSurroundedByNothing = (newValues, yVal, xVal) => {
+  // Check top
+  if (yVal != 0) {
+    if (newValues[yVal-1][xVal] !== 0) {
+      return false;
+    }
+  }
+  // Check right
+  if (xVal !== newValues[yVal].length-1) {
+    if (newValues[yVal][xVal+1] !== 0) {
+      return false;
+    }
+  }
+  // Check bottom
+  if (yVal !== newValues.length-1) {
+    if (newValues[yVal+1][xVal] !== 0) {
+      return false;
+    }
+  }
+  // Check left
+  if (xVal != 0) {
+    if (newValues[yVal][xVal-1] !== 0) {
+      return false;
+    }
+  }
+
+  return true;
+}

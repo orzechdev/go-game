@@ -25,6 +25,17 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      <v-dialog v-model="finishDialog" max-width="290">
+        <v-card>
+          <v-card-title class="headline">{{finishDialogTitle}}</v-card-title>
+          <v-card-text>{{finishDialogDescription}}</v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn flat @click="finishDialog = false">Close</v-btn>
+            <v-btn flat color="primary" @click="onClickEmptyBoard">Empty board</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-content>
 
     <v-bottom-nav :active.sync="bottomNav" :value="true" fixed color="white">

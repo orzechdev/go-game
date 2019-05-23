@@ -1,7 +1,7 @@
 import { evaluateBoard } from "./boardStateEvaluation";
 import { isFieldSurroundedByJustOneColor, isGameFinished, checkFinalPoints } from "./boardFinishEvaluation";
 import { colors } from "./boardConsts";
-import { checkCurrentPoints } from "./boardCurrentEvaluation";
+import { checkCurrentPoints, isFieldSurroundedByNothing } from "./boardCurrentEvaluation";
 
 /**
  * Returns object with outcome, x and y where player should set stone 
@@ -90,7 +90,7 @@ const calculateMovesOutcomes = (currValues, playerColor, depthIteration) => {
 const calculateMoveMaxMinOutcome = (currValues, playerColor, val, y, x, depthIteration) => {
   let newValues = currValues.map(arr => arr.slice())
 
-  if (val === 0 && !isFieldSurroundedByJustOneColor(newValues, val, y, x)) {
+  if (val === 0 && !isFieldSurroundedByNothing(newValues, y, x) && !isFieldSurroundedByJustOneColor(newValues, val, y, x)) {
     return calculateMoveMaxOutcome(newValues, playerColor, y, x, depthIteration)
   } else {
     if (isEvenIteration(depthIteration)) {
