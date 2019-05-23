@@ -7,15 +7,15 @@ import { checkCurrentPoints } from "./boardCurrentEvaluation";
  * Returns object with outcome, x and y where player should set stone 
  * to potentially obtain best results calculated by min-max algorithm 
  */
-export const calculateMinMaxMove = async (currValues, playerColor, depth = 1) => {
-  return await calculateBestMove(currValues, playerColor, depth * 2)
+export const calculateMinMaxMove = (currValues, playerColor, depth = 1) => {
+  return calculateBestMove(currValues, playerColor, depth * 2)
 }
 
 /**
  * It gives best (max) new values (worst for opponent)
  */
-const calculateBestMove = async (currValues, playerColor, depthIteration) => {
-  const movesOutcomes = await calculateMovesOutcomes(currValues, playerColor, depthIteration)
+const calculateBestMove = (currValues, playerColor, depthIteration) => {
+  const movesOutcomes = calculateMovesOutcomes(currValues, playerColor, depthIteration)
 
   // console.log('ACHTUNG BEST');
   // console.log(movesOutcomes);//{outcome: -1000, y: 5, x: 5}//
@@ -35,8 +35,8 @@ const calculateBestMove = async (currValues, playerColor, depthIteration) => {
 /**
  * It gives worst (min) new values (best for opponent)
  */
-const calculateWorstCountermove = async (currValues, playerColor, depthIteration) => {
-  const movesOutcomes = await calculateMovesOutcomes(currValues, playerColor, depthIteration)
+const calculateWorstCountermove = (currValues, playerColor, depthIteration) => {
+  const movesOutcomes = calculateMovesOutcomes(currValues, playerColor, depthIteration)
 
   // console.log('ACHTUNG WORST');
   // console.log(movesOutcomes);//{outcome: -1000, y: 5, x: 5}//
@@ -63,7 +63,7 @@ const calculateWorstCountermove = async (currValues, playerColor, depthIteration
 /**
  * It calculates possible values with their outcomes for player
  */
-const calculateMovesOutcomes = async (currValues, playerColor, depthIteration) => {
+const calculateMovesOutcomes = (currValues, playerColor, depthIteration) => {
   let movesOutcomes = [
     [null,null,null,null,null,null,null,null,null],
     [null,null,null,null,null,null,null,null,null],
@@ -76,61 +76,22 @@ const calculateMovesOutcomes = async (currValues, playerColor, depthIteration) =
     [null,null,null,null,null,null,null,null,null],
   ];
 
-  let promises = [];
-
-
-
-  // const actions = [
-  //   { message: 'func1', func: () => `Worker 1: Working on func1` },
-  //   { message: 'func2', func: arg => `Worker 2: ${arg}` },
-  //   { message: 'func3', func: arg => `Worker 3: ${arg}` },
-  //   { message: 'func4', func: (arg = 'Working on func4') => `Worker 4: ${arg}` }
-  // ]
-  
-  // let worker = this.$worker.create(actions)
-  
-  // worker.postAll()
-  //   .then(console.log) // logs ['Worker 1: Working on func1', 'Worker 2: undefined', 'Worker 3: undefined', 'Worker 4: Working on func4']
-  //   .catch(console.error) // logs any possible error
-
-
-
   for (let y = 0; y < currValues.length; y++) {
     for (let x = 0; x < currValues[y].length; x++) {
       const val = currValues[y][x];
       // It would be better to parallelize it...
-      if (isEvenIteration(depthIteration)) {
-        promises.push(calculateMoveMaxMinOutcome(currValues, playerColor, val, y, x, depthIteration))
-      } else {
-        movesOutcomes[y][x] = await calculateMoveMaxMinOutcome(currValues, playerColor, val, y, x, depthIteration)
-      }
-      // movesOutcomes[y][x] = calculateMoveMaxMinOutcome(currValues, playerColor, val, y, x, depthIteration)
+      movesOutcomes[y][x] = calculateMoveMaxMinOutcome(currValues, playerColor, val, y, x, depthIteration)
     }
-  }
-
-  if (isEvenIteration(depthIteration)) {
-    await Promise.all(promises)
-      .then((results) => {
-        for (let y = 0; y < currValues.length; y++) {
-          for (let x = 0; x < currValues[y].length; x++) {
-            movesOutcomes[y][x] = results[(y*9) + x];
-          }
-        }
-      })
-      .catch((e) => {
-        console.error(e);
-          // handle errors here
-      });
   }
 
   return movesOutcomes
 }
 
-const calculateMoveMaxMinOutcome = async (currValues, playerColor, val, y, x, depthIteration) => {
+const calculateMoveMaxMinOutcome = (currValues, playerColor, val, y, x, depthIteration) => {
   let newValues = currValues.map(arr => arr.slice())
 
   if (val === 0 && !isFieldSurroundedByJustOneColor(newValues, val, y, x)) {
-    return await calculateMoveMaxOutcome(newValues, playerColor, y, x, depthIteration)
+    return calculateMoveMaxOutcome(newValues, playerColor, y, x, depthIteration)
   } else {
     if (isEvenIteration(depthIteration)) {
       return {outcome: -1000, y: y, x: x}
@@ -140,7 +101,7 @@ const calculateMoveMaxMinOutcome = async (currValues, playerColor, val, y, x, de
   }
 }
 
-const calculateMoveMaxOutcome = async (newValues, playerColor, y, x, depthIteration) => {
+const calculateMoveMaxOutcome = (newValues, playerColor, y, x, depthIteration) => {
   newValues[y][x] = playerColor
 
   // Evaluate new board
@@ -178,12 +139,12 @@ const calculateMoveMaxOutcome = async (newValues, playerColor, y, x, depthIterat
   if (isEvenIteration(depthIteration)) {
     const newDepthIteration = depthIteration - 1;
     const opponentColor = playerColor === colors.WHITE ? colors.BLACK : colors.WHITE
-    const calculatedNextMove = await calculateWorstCountermove(newValues, opponentColor, newDepthIteration)
+    const calculatedNextMove = calculateWorstCountermove(newValues, opponentColor, newDepthIteration)
     return {outcome: calculatedNextMove.outcome, y: y, x: x}
   } else {
     const newDepthIteration = depthIteration - 1;
     const currentColor = playerColor === colors.WHITE ? colors.BLACK : colors.WHITE
-    const calculatedNextMove = await calculateBestMove(newValues, currentColor, newDepthIteration);
+    const calculatedNextMove = calculateBestMove(newValues, currentColor, newDepthIteration);
     return {outcome: calculatedNextMove.outcome, y: y, x: x}
   }
 }
