@@ -130,7 +130,7 @@ const calculateMoveMaxOutcome = (currValues, playerColor, y, x, depthIteration) 
  * Evaluate points from the current player perspective - if higher its better, if lower then its worse
  */
 const evaluatePoints = (currentPoints, opponentPoints) => {
-  return currentPoints - opponentPoints;
+  return opponentPoints - currentPoints;
 }
 
 const isEvenIteration = (n) => {
