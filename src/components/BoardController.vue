@@ -37,18 +37,18 @@ export default {
      */
     currentColor: 1,
     values: //[[0,0,0,0,0,0,0,0,0],[0,2,2,2,1,0,0,0,0],[0,2,2,0,2,1,0,0,0],[0,0,2,1,0,1,0,0,0],[0,0,1,0,1,0,0,0,0],[0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0]]
-    [[2,0,2,2,2,1,1,0,1],[2,2,2,0,1,2,2,1,0],[2,0,2,1,0,1,2,2,2],[2,2,0,1,1,0,1,1,0],[1,2,1,0,1,1,2,2,1],[1,1,0,0,1,2,2,0,2],[2,2,2,1,0,1,1,2,0],[1,1,1,0,1,0,2,2,2],[1,0,1,1,1,2,2,0,2]]
-    // [
-    //   [0,0,0,0,0,0,0,0,0],
-    //   [0,0,0,0,0,0,0,0,0],
-    //   [0,0,2,0,0,0,0,0,0],
-    //   [0,0,0,1,0,0,0,0,0],
-    //   [0,0,0,0,0,0,0,0,0],
-    //   [0,0,0,0,0,0,0,0,0],
-    //   [0,0,0,0,0,0,0,0,0],
-    //   [0,0,0,0,0,0,0,0,0],
-    //   [0,0,0,0,0,0,0,0,0],
-    // ],
+    // [[2,0,2,2,2,1,1,0,1],[2,2,2,0,1,2,2,1,0],[2,0,2,1,0,1,2,2,2],[2,2,0,1,1,0,1,1,0],[1,2,1,0,1,1,2,2,1],[1,1,0,0,1,2,2,0,2],[2,2,2,1,0,1,1,2,0],[1,1,1,0,1,0,2,2,2],[1,0,1,1,1,2,2,0,2]]
+    [
+      [0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0],
+      [0,0,2,0,0,0,0,0,0],
+      [0,0,0,1,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0],
+    ],
   }),
   methods: {
     changeToWhite () {
@@ -70,9 +70,21 @@ export default {
 
         const opponentColor = this.currentColor === 1 ? 2 : 1
 
+        const start = +new Date();
+        // calculateMinMaxMove(valuesToCalculate, opponentColor, 2)
+        // calculateMinMaxMove(valuesToCalculate, opponentColor, 2)
+        // calculateMinMaxMove(valuesToCalculate, opponentColor, 2)
+        // calculateMinMaxMove(valuesToCalculate, opponentColor, 2)
+        // calculateMinMaxMove(valuesToCalculate, opponentColor, 2)
+        // calculateMinMaxMove(valuesToCalculate, opponentColor, 2)
+        // calculateMinMaxMove(valuesToCalculate, opponentColor, 2)
+        // calculateMinMaxMove(valuesToCalculate, opponentColor, 2)
+        // calculateMinMaxMove(valuesToCalculate, opponentColor, 2)
         const {outcome, y, x} = calculateMinMaxMove(valuesToCalculate, opponentColor, 2)
+        const end = +new Date();
 
         console.log(`calculateMinMaxMove - outcome:${outcome} y:${y} x:${x}`)
+        console.log(`calculateMinMaxMove - time spend:${end - start}`)
 
         this.placeStoneAndEvaluate(opponentColor, y+1, x+1)
 

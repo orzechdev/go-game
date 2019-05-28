@@ -1,4 +1,6 @@
 
+const BOARD_WIDTH = 8;
+
 /**
  * Evaluate how many stones each user have, including surrounded empty fileds
  */
@@ -6,9 +8,9 @@ export const checkCurrentPoints = (newValues) => {
   let whitePoints = 0;
   let blackPoints = 0;
 
-  for (let y = 0; y < newValues.length; y++) {
+  for (let y = 0; y < BOARD_WIDTH; y++) {
     const row = newValues[y];
-    for (let x = 0; x < row.length; x++) {
+    for (let x = 0; x < BOARD_WIDTH; x++) {
       const val = row[x];
       const currentColorVal = checkCurrentFieldPoint(newValues, val, y, x)
       if (currentColorVal === 1) {
@@ -39,13 +41,13 @@ const checkCurrentFieldPoint = (newValues, val, yVal, xVal) => {
       surroundedColorCheck = newValues[yVal-1][xVal]
     }
     // Check right
-    else if (xVal !== newValues[yVal].length-1) {
+    else if (xVal !== BOARD_WIDTH-1) {
       if (newValues[yVal][xVal+1] !== surroundedColorCheck) {
         return 0;
       }
     } 
     // Check bottom
-    else if (yVal !== newValues.length-1) {
+    else if (yVal !== BOARD_WIDTH-1) {
       if (newValues[yVal+1][xVal] !== surroundedColorCheck) {
         return 0;
       }
@@ -70,13 +72,13 @@ export const isFieldSurroundedByNothing = (newValues, yVal, xVal) => {
     }
   }
   // Check right
-  if (xVal !== newValues[yVal].length-1) {
+  if (xVal !== BOARD_WIDTH-1) {
     if (newValues[yVal][xVal+1] !== 0) {
       return false;
     }
   }
   // Check bottom
-  if (yVal !== newValues.length-1) {
+  if (yVal !== BOARD_WIDTH-1) {
     if (newValues[yVal+1][xVal] !== 0) {
       return false;
     }

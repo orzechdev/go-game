@@ -65,7 +65,7 @@ const calculateMovesOutcomes = (currValues, playerColor, depthIteration) => {
 }
 
 const calculateMoveMaxMinOutcome = (currValues, playerColor, val, y, x, depthIteration) => {
-  if (val === 0 && !isFieldSurroundedByNothing(currValues, y, x) && !isFieldSurroundedByJustOneColor(currValues, val, y, x)) {
+  if (val === 0 && !isFieldSurroundedByNothing(currValues, y, x) && !isFieldSurroundedByJustOneColor(currValues, y, x)) {
     return calculateMoveMaxOutcome(currValues, playerColor, y, x, depthIteration)
   } else {
     if (isEvenIteration(depthIteration)) {

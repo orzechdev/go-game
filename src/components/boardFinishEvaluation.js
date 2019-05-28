@@ -1,11 +1,13 @@
 
+const BOARD_WIDTH = 8;
+
 /**
  * Check if game is finished
  */
 export const isGameFinished = (newValues) => {
-  for (let y = 0; y < newValues.length; y++) {
+  for (let y = 0; y < BOARD_WIDTH; y++) {
     const row = newValues[y];
-    for (let x = 0; x < row.length; x++) {
+    for (let x = 0; x < BOARD_WIDTH; x++) {
       const val = row[x];
       if (!isFieldDetermined(newValues, val, y, x)) {
         return false;
@@ -20,13 +22,13 @@ export const isGameFinished = (newValues) => {
  */
 export const isFieldDetermined = (newValues, val, yVal, xVal) => {
   // Check if is filled with any stone
-  if (newValues[yVal][xVal] !== 0) {
+  if (val !== 0) {
     return true;
   }
-  return isFieldSurroundedByJustOneColor(newValues, val, yVal, xVal)
+  return isFieldSurroundedByJustOneColor(newValues, yVal, xVal)
 }
 
-export const isFieldSurroundedByJustOneColor = (newValues, val, yVal, xVal) => {
+export const isFieldSurroundedByJustOneColor = (newValues, yVal, xVal) => {
   let isNeighborChecked = false;
   let isWhiteNeighbor = false;
   let isBlackNeighbor = false;
@@ -42,7 +44,7 @@ export const isFieldSurroundedByJustOneColor = (newValues, val, yVal, xVal) => {
     isNeighborChecked = true;
   }
   // Check right
-  if (xVal !== newValues[yVal].length-1) {
+  if (xVal !== BOARD_WIDTH-1) {
     if (newValues[yVal][xVal+1] === 0) {
       return false;
     } else if (newValues[yVal][xVal+1] === 1) {
@@ -59,7 +61,7 @@ export const isFieldSurroundedByJustOneColor = (newValues, val, yVal, xVal) => {
     isNeighborChecked = true;
   }
   // Check bottom
-  if (yVal !== newValues.length-1) {
+  if (yVal !== BOARD_WIDTH-1) {
     if (newValues[yVal+1][xVal] === 0) {
       return false;
     } else if (newValues[yVal+1][xVal] === 1) {
@@ -104,9 +106,9 @@ export const checkFinalPoints = (newValues) => {
   let whitePoints = 0;
   let blackPoints = 0;
 
-  for (let y = 0; y < newValues.length; y++) {
+  for (let y = 0; y < BOARD_WIDTH; y++) {
     const row = newValues[y];
-    for (let x = 0; x < row.length; x++) {
+    for (let x = 0; x < BOARD_WIDTH; x++) {
       const val = row[x];
       const finalColorVal = checkFinalFieldPoint(newValues, val, y, x)
       if (finalColorVal === 1) {
@@ -134,11 +136,11 @@ const checkFinalFieldPoint = (newValues, val, yVal, xVal) => {
       return newValues[yVal-1][xVal] === 1 ? 1 : 2
     }
     // Check right
-    else if (xVal !== newValues[yVal].length-1) {
+    else if (xVal !== BOARD_WIDTH-1) {
       return newValues[yVal][xVal+1] === 1 ? 1 : 2
     } 
     // Check bottom
-    else if (yVal !== newValues.length-1) {
+    else if (yVal !== BOARD_WIDTH-1) {
       return newValues[yVal+1][xVal] === 1 ? 1 : 2
     } 
     // Check left
