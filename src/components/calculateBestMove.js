@@ -65,10 +65,8 @@ const calculateMovesOutcomes = (currValues, playerColor, depthIteration) => {
 }
 
 const calculateMoveMaxMinOutcome = (currValues, playerColor, val, y, x, depthIteration) => {
-  let newValues = currValues.map(arr => arr.slice())
-
-  if (val === 0 && !isFieldSurroundedByNothing(newValues, y, x) && !isFieldSurroundedByJustOneColor(newValues, val, y, x)) {
-    return calculateMoveMaxOutcome(newValues, playerColor, y, x, depthIteration)
+  if (val === 0 && !isFieldSurroundedByNothing(currValues, y, x) && !isFieldSurroundedByJustOneColor(currValues, val, y, x)) {
+    return calculateMoveMaxOutcome(currValues, playerColor, y, x, depthIteration)
   } else {
     if (isEvenIteration(depthIteration)) {
       return {outcome: -1000, y: y, x: x}
@@ -78,7 +76,9 @@ const calculateMoveMaxMinOutcome = (currValues, playerColor, val, y, x, depthIte
   }
 }
 
-const calculateMoveMaxOutcome = (newValues, playerColor, y, x, depthIteration) => {
+const calculateMoveMaxOutcome = (currValues, playerColor, y, x, depthIteration) => {
+  let newValues = currValues.map(arr => arr.slice())
+
   newValues[y][x] = playerColor
 
   // Evaluate new board
