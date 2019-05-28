@@ -1,13 +1,13 @@
 
-const BOARD_WIDTH = 8;
+const BOARD_LENGTH = 9;
 
 /**
  * Check if game is finished
  */
 export const isGameFinished = (newValues) => {
-  for (let y = 0; y < BOARD_WIDTH; y++) {
+  for (let y = 0; y < BOARD_LENGTH; y++) {
     const row = newValues[y];
-    for (let x = 0; x < BOARD_WIDTH; x++) {
+    for (let x = 0; x < BOARD_LENGTH; x++) {
       const val = row[x];
       if (!isFieldDetermined(newValues, val, y, x)) {
         return false;
@@ -44,7 +44,7 @@ export const isFieldSurroundedByJustOneColor = (newValues, yVal, xVal) => {
     isNeighborChecked = true;
   }
   // Check right
-  if (xVal !== BOARD_WIDTH-1) {
+  if (xVal !== BOARD_LENGTH-1) {
     if (newValues[yVal][xVal+1] === 0) {
       return false;
     } else if (newValues[yVal][xVal+1] === 1) {
@@ -61,7 +61,7 @@ export const isFieldSurroundedByJustOneColor = (newValues, yVal, xVal) => {
     isNeighborChecked = true;
   }
   // Check bottom
-  if (yVal !== BOARD_WIDTH-1) {
+  if (yVal !== BOARD_LENGTH-1) {
     if (newValues[yVal+1][xVal] === 0) {
       return false;
     } else if (newValues[yVal+1][xVal] === 1) {
@@ -106,9 +106,9 @@ export const checkFinalPoints = (newValues) => {
   let whitePoints = 0;
   let blackPoints = 0;
 
-  for (let y = 0; y < BOARD_WIDTH; y++) {
+  for (let y = 0; y < BOARD_LENGTH; y++) {
     const row = newValues[y];
-    for (let x = 0; x < BOARD_WIDTH; x++) {
+    for (let x = 0; x < BOARD_LENGTH; x++) {
       const val = row[x];
       const finalColorVal = checkFinalFieldPoint(newValues, val, y, x)
       if (finalColorVal === 1) {
@@ -136,11 +136,11 @@ const checkFinalFieldPoint = (newValues, val, yVal, xVal) => {
       return newValues[yVal-1][xVal] === 1 ? 1 : 2
     }
     // Check right
-    else if (xVal !== BOARD_WIDTH-1) {
+    else if (xVal !== BOARD_LENGTH-1) {
       return newValues[yVal][xVal+1] === 1 ? 1 : 2
     } 
     // Check bottom
-    else if (yVal !== BOARD_WIDTH-1) {
+    else if (yVal !== BOARD_LENGTH-1) {
       return newValues[yVal+1][xVal] === 1 ? 1 : 2
     } 
     // Check left

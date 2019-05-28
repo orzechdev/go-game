@@ -52,11 +52,11 @@ const calculateWorstCountermove = (currValues, playerColor, depthIteration) => {
  * It calculates possible values with their outcomes for player
  */
 const calculateMovesOutcomes = (currValues, playerColor, depthIteration) => {
-  let movesOutcomes = new Array(64);
+  let movesOutcomes = new Array(81);
 
-  for (let i = 0; i < 64; i++) {
-    const y = ~~(i / 8);
-    const x = i % 8;
+  for (let i = 0; i < 81; i++) {
+    const y = ~~(i / 9);
+    const x = i % 9;
     // It would be better to parallelize it...
     movesOutcomes[i] = calculateMoveMaxMinOutcome(currValues, playerColor, currValues[y][x], y, x, depthIteration);
   }
