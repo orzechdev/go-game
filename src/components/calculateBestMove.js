@@ -20,13 +20,7 @@ const calculateBestMove = (currValues, playerColor, depthIteration) => {
   // console.log('ACHTUNG BEST');
   // console.log(movesOutcomes);//{outcome: -1000, y: 5, x: 5}//
 
-  const bestRowResult = movesOutcomes.map(row => 
-    row.reduce((prev, current) => 
-      (prev.outcome > current.outcome) ? prev : current
-    )
-  )
-
-  const bestResult = bestRowResult.reduce((prev, current) => 
+  const bestResult = movesOutcomes.reduce((prev, current) => 
     (prev.outcome > current.outcome) ? prev : current
   );
 
@@ -41,16 +35,10 @@ const calculateWorstCountermove = (currValues, playerColor, depthIteration) => {
   // console.log('ACHTUNG WORST');
   // console.log(movesOutcomes);//{outcome: -1000, y: 5, x: 5}//
 
-  const worsrRowCounterresult = movesOutcomes.map(row =>
-    row.reduce((prev, current) => 
-      (prev.outcome < current.outcome) ? prev : current
-    )
-  );
-
   // console.log('ACHTUNG 2');
   // console.log(worsrRowCounterresult);//{outcome: -1000, y: 5, x: 5}//
 
-  const worstCounterresult = worsrRowCounterresult.reduce((prev, current) => 
+  const worstCounterresult = movesOutcomes.reduce((prev, current) => 
     (prev.outcome < current.outcome) ? prev : current
   );
 
@@ -64,24 +52,13 @@ const calculateWorstCountermove = (currValues, playerColor, depthIteration) => {
  * It calculates possible values with their outcomes for player
  */
 const calculateMovesOutcomes = (currValues, playerColor, depthIteration) => {
-  let movesOutcomes = [
-    [null,null,null,null,null,null,null,null,null],
-    [null,null,null,null,null,null,null,null,null],
-    [null,null,null,null,null,null,null,null,null],
-    [null,null,null,null,null,null,null,null,null],
-    [null,null,null,null,null,null,null,null,null],
-    [null,null,null,null,null,null,null,null,null],
-    [null,null,null,null,null,null,null,null,null],
-    [null,null,null,null,null,null,null,null,null],
-    [null,null,null,null,null,null,null,null,null],
-  ];
+  let movesOutcomes = new Array(64);
 
-  for (let y = 0; y < currValues.length; y++) {
-    for (let x = 0; x < currValues[y].length; x++) {
-      const val = currValues[y][x];
-      // It would be better to parallelize it...
-      movesOutcomes[y][x] = calculateMoveMaxMinOutcome(currValues, playerColor, val, y, x, depthIteration)
-    }
+  for (let i = 0; i < 64; i++) {
+    const y = ~~(i / 8);
+    const x = i % 8;
+    // It would be better to parallelize it...
+    movesOutcomes[i] = calculateMoveMaxMinOutcome(currValues, playerColor, currValues[y][x], y, x, depthIteration);
   }
 
   return movesOutcomes
