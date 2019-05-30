@@ -7,15 +7,15 @@ import { checkCurrentPoints, isFieldSurroundedByNothing } from "./boardCurrentEv
  * Returns object with outcome, x and y where player should set stone 
  * to potentially obtain best results calculated by min-max algorithm 
  */
-export const calculateMinMaxMove = (currValues, playerColor, depth = 1) => {
-  return calculateBestMove(currValues, playerColor, depth * 2)
+export const calculateMinMaxMove = (currValues, playerColor, boardSize, depth = 1) => {
+  return calculateBestMove(currValues, playerColor, boardSize, depth * 2)
 }
 
 /**
  * It gives best (max) new values (worst for opponent)
  */
-const calculateBestMove = (currValues, playerColor, depthIteration) => {
-  const movesOutcomes = calculateMovesOutcomes(currValues, playerColor, depthIteration)
+const calculateBestMove = (currValues, playerColor, boardSize, depthIteration) => {
+  const movesOutcomes = calculateMovesOutcomes(currValues, playerColor, boardSize, depthIteration)
 
   // console.log('ACHTUNG BEST');
   // console.log(movesOutcomes);//{outcome: -1000, y: 5, x: 5}//
@@ -29,8 +29,8 @@ const calculateBestMove = (currValues, playerColor, depthIteration) => {
 /**
  * It gives worst (min) new values (best for opponent)
  */
-const calculateWorstCountermove = (currValues, playerColor, depthIteration) => {
-  const movesOutcomes = calculateMovesOutcomes(currValues, playerColor, depthIteration)
+const calculateWorstCountermove = (currValues, playerColor, boardSize, depthIteration) => {
+  const movesOutcomes = calculateMovesOutcomes(currValues, playerColor, boardSize, depthIteration)
 
   // console.log('ACHTUNG WORST');
   // console.log(movesOutcomes);//{outcome: -1000, y: 5, x: 5}//
@@ -51,22 +51,23 @@ const calculateWorstCountermove = (currValues, playerColor, depthIteration) => {
 /**
  * It calculates possible values with their outcomes for player
  */
-const calculateMovesOutcomes = (currValues, playerColor, depthIteration) => {
-  let movesOutcomes = new Array(81);
+const calculateMovesOutcomes = (currValues, playerColor, boardSize, depthIteration) => {
+  const boardSqrtSize = boardSize * boardSize;
+  let movesOutcomes = new Array(boardSqrtSize);
 
-  for (let i = 0; i < 81; i++) {
-    const y = ~~(i / 9);
-    const x = i % 9;
+  for (let i = 0; i < boardSqrtSize; i++) {
+    const y = ~~(i / boardSize);
+    const x = i % boardSize;
     // It would be better to parallelize it...
-    movesOutcomes[i] = calculateMoveMaxMinOutcome(currValues, playerColor, currValues[y][x], y, x, depthIteration);
+    movesOutcomes[i] = calculateMoveMaxMinOutcome(currValues, playerColor, currValues[y][x], y, x, boardSize, depthIteration);
   }
 
   return movesOutcomes
 }
 
-const calculateMoveMaxMinOutcome = (currValues, playerColor, val, y, x, depthIteration) => {
-  if (val === 0 && !isFieldSurroundedByNothing(currValues, y, x) && !isFieldSurroundedByJustOneColor(currValues, y, x)) {
-    return calculateMoveMaxOutcome(currValues, playerColor, y, x, depthIteration)
+const calculateMoveMaxMinOutcome = (currValues, playerColor, val, y, x, boardSize, depthIteration) => {
+  if (val === 0 && !isFieldSurroundedByNothing(currValues, y, x, boardSize) && !isFieldSurroundedByJustOneColor(currValues, y, x, boardSize)) {
+    return calculateMoveMaxOutcome(currValues, playerColor, y, x, boardSize, depthIteration)
   } else {
     if (isEvenIteration(depthIteration)) {
       return {outcome: -1000, y: y, x: x}
@@ -76,24 +77,24 @@ const calculateMoveMaxMinOutcome = (currValues, playerColor, val, y, x, depthIte
   }
 }
 
-const calculateMoveMaxOutcome = (currValues, playerColor, y, x, depthIteration) => {
+const calculateMoveMaxOutcome = (currValues, playerColor, y, x, boardSize, depthIteration) => {
   let newValues = currValues.map(arr => arr.slice())
 
   newValues[y][x] = playerColor
 
   // Evaluate new board
-  let [currentValuesChanged, evaluatedValues] = evaluateBoard(newValues)
+  let [currentValuesChanged, evaluatedValues] = evaluateBoard(newValues, boardSize)
   if (currentValuesChanged) {
     newValues = evaluatedValues
   }
 
-  if (isGameFinished(newValues)) {
+  if (isGameFinished(newValues, boardSize)) {
     /**
      * Calculate final points at which the game will stopped
      */
-    const [whitePoints, blackPoints] = checkFinalPoints(newValues)
-    const currentPoints = playerColor === whitePoints ? whitePoints : blackPoints;
-    const opponentPoints = playerColor === whitePoints ? blackPoints : whitePoints;
+    const [whitePoints, blackPoints] = checkFinalPoints(newValues, boardSize)
+    const currentPoints = playerColor === colors.WHITE ? whitePoints : blackPoints;
+    const opponentPoints = playerColor === colors.WHITE ? blackPoints : whitePoints;
     const points = evaluatePoints(currentPoints, opponentPoints);
     
     return {outcome: points, y: y, x: x}
@@ -104,9 +105,9 @@ const calculateMoveMaxOutcome = (currValues, playerColor, y, x, depthIteration) 
     /**
      * Check points in current game tree state, i.e. this time when game is not yet in end state, but depth of calculations is reached
      */
-    const [whitePoints, blackPoints] = checkCurrentPoints(newValues)
-    const currentPoints = playerColor === whitePoints ? whitePoints : blackPoints;
-    const opponentPoints = playerColor === whitePoints ? blackPoints : whitePoints;
+    const [whitePoints, blackPoints] = checkCurrentPoints(newValues, boardSize)
+    const currentPoints = playerColor === colors.WHITE ? whitePoints : blackPoints;
+    const opponentPoints = playerColor === colors.WHITE ? blackPoints : whitePoints;
     const points = evaluatePoints(currentPoints, opponentPoints);
 
     return {outcome: points, y: y, x: x}
@@ -116,12 +117,12 @@ const calculateMoveMaxOutcome = (currValues, playerColor, y, x, depthIteration) 
   if (isEvenIteration(depthIteration)) {
     const newDepthIteration = depthIteration - 1;
     const opponentColor = playerColor === colors.WHITE ? colors.BLACK : colors.WHITE
-    const calculatedNextMove = calculateWorstCountermove(newValues, opponentColor, newDepthIteration)
+    const calculatedNextMove = calculateWorstCountermove(newValues, opponentColor, boardSize, newDepthIteration)
     return {outcome: calculatedNextMove.outcome, y: y, x: x}
   } else {
     const newDepthIteration = depthIteration - 1;
     const currentColor = playerColor === colors.WHITE ? colors.BLACK : colors.WHITE
-    const calculatedNextMove = calculateBestMove(newValues, currentColor, newDepthIteration);
+    const calculatedNextMove = calculateBestMove(newValues, currentColor, boardSize, newDepthIteration);
     return {outcome: calculatedNextMove.outcome, y: y, x: x}
   }
 }

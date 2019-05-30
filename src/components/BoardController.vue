@@ -5,11 +5,28 @@
         <board 
           :currentColor="currentColor" 
           :values="values" 
+          :size="boardSizeSelected"
           @click="click">
         </board>
         <v-flex class="button-container">
           <v-btn color="white" @click="changeToWhite">White</v-btn>
           <v-btn color="black" class="white-text" @click="changeToBlack">Black</v-btn>
+        </v-flex>
+        <v-flex xs12 sm6 class="button-container">
+          <v-select
+            v-model="boardSizeSelected"
+            @change="changeBoardSize"
+            :items="boardSizes"
+            label="Board size"
+          ></v-select>
+        </v-flex>
+        <v-flex xs12 sm6 class="button-container">
+          <v-select
+            v-model="calculationDepthSelected"
+            :items="calculationDepths"
+            label="Calculation depth"
+            :error-messages="calculationDepthSelected < 3 ? [] : 'Selected depth can significantly increase the calculation time and cause the browser to hang!'"
+          ></v-select>
         </v-flex>
         <v-flex class="button-container margin-bottom">
           <v-btn @click="emptyBoard">Empty board</v-btn>
@@ -36,21 +53,30 @@ export default {
      * 2 - black
      */
     currentColor: 1,
-    values: //[[0,0,0,0,0,0,0,0,0],[0,2,2,2,1,0,0,0,0],[0,2,2,0,2,1,0,0,0],[0,0,2,1,0,1,0,0,0],[0,0,1,0,1,0,0,0,0],[0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0]]
+    values: Array.from({length: 5}, () => Array(5).fill(0)),
+    //[[0,0,0,0,0,0,0,0,0],[0,2,2,2,1,0,0,0,0],[0,2,2,0,2,1,0,0,0],[0,0,2,1,0,1,0,0,0],[0,0,1,0,1,0,0,0,0],[0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0]]
     // [[2,0,2,2,2,1,1,0,1],[2,2,2,0,1,2,2,1,0],[2,0,2,1,0,1,2,2,2],[2,2,0,1,1,0,1,1,0],[1,2,1,0,1,1,2,2,1],[1,1,0,0,1,2,2,0,2],[2,2,2,1,0,1,1,2,0],[1,1,1,0,1,0,2,2,2],[1,0,1,1,1,2,2,0,2]]
-    [
-      [0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0],
-      [0,0,2,0,0,0,0,0,0],
-      [0,0,0,1,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,0,0,0],
-    ],
+    // [
+    //   [0,0,0,0,0,0,0,0,0],
+    //   [0,0,0,0,0,0,0,0,0],
+    //   [0,0,0,0,0,0,0,0,0],
+    //   [0,0,0,0,0,0,0,0,0],
+    //   [0,0,0,0,0,0,0,0,0],
+    //   [0,0,0,0,0,0,0,0,0],
+    //   [0,0,0,0,0,0,0,0,0],
+    //   [0,0,0,0,0,0,0,0,0],
+    //   [0,0,0,0,0,0,0,0,0],
+    // ],
+    calculationDepths: [1, 2, 3],
+    calculationDepthSelected: 2,
+    calculationTimes: [],
+    boardSizes: [19, 17, 13, 11, 9, 5],
+    boardSizeSelected: 5
   }),
   methods: {
+    changeBoardSize (size) {
+      this.values = Array.from({length: size}, () => Array(size).fill(0))
+    },
     changeToWhite () {
       this.currentColor = 1
     },
@@ -60,9 +86,9 @@ export default {
     click (i, j) {
       this.placeStoneAndEvaluate(this.currentColor, i, j)
 
-      if (isGameFinished(this.values)) {
+      if (isGameFinished(this.values, this.boardSizeSelected)) {
         console.log('GAME FINISHED')
-        const [whitePoints, blackPoints] = checkFinalPoints(this.values)
+        const [whitePoints, blackPoints] = checkFinalPoints(this.values, this.boardSizeSelected)
         console.log(`white points: ${whitePoints}, black points: ${blackPoints}`)
         this.onFinishGame(whitePoints, blackPoints)
       } else {
@@ -80,17 +106,19 @@ export default {
         // calculateMinMaxMove(valuesToCalculate, opponentColor, 2)
         // calculateMinMaxMove(valuesToCalculate, opponentColor, 2)
         // calculateMinMaxMove(valuesToCalculate, opponentColor, 2)
-        const {outcome, y, x} = calculateMinMaxMove(valuesToCalculate, opponentColor, 2)
+        const {outcome, y, x} = calculateMinMaxMove(valuesToCalculate, opponentColor, this.boardSizeSelected, this.calculationDepthSelected)
         const end = +new Date();
+        const diffTime = end - start;
+        this.calculationTimes.push(diffTime)
 
         console.log(`calculateMinMaxMove - outcome:${outcome} y:${y} x:${x}`)
-        console.log(`calculateMinMaxMove - time spend:${end - start}`)
+        console.log(`calculateMinMaxMove - time spend:${diffTime}`)
 
         this.placeStoneAndEvaluate(opponentColor, y+1, x+1)
 
-        if (isGameFinished(this.values)) {
+        if (isGameFinished(this.values, this.boardSizeSelected)) {
           console.log('GAME FINISHED')
-          const [whitePoints, blackPoints] = checkFinalPoints(this.values)
+          const [whitePoints, blackPoints] = checkFinalPoints(this.values, this.boardSizeSelected)
           console.log(`white points: ${whitePoints}, black points: ${blackPoints}`)
           this.onFinishGame(whitePoints, blackPoints)
         }
@@ -106,7 +134,10 @@ export default {
 
       let valuesToEvaluate = this.values.map(arr => arr.slice())
 
-      let [currentValuesChanged, evaluatedValues] = evaluateBoard(valuesToEvaluate)
+      // console.log("VALUES TO EVALUATE")
+      // console.log(valuesToEvaluate)
+
+      let [currentValuesChanged, evaluatedValues] = evaluateBoard(valuesToEvaluate, this.boardSizeSelected)
 
       console.log("EVALUATED VALUES")
       console.log(evaluatedValues)
@@ -129,6 +160,7 @@ export default {
         }
       }
       this.currentColor = 2;
+      this.calculationTimes = [];
     }
   }
 };
@@ -140,6 +172,8 @@ export default {
   }
   .button-container {
     margin-bottom: 30px;
+    margin-left: auto;
+    margin-right: auto;
   }
   .margin-bottom {
     margin-bottom: 80px;

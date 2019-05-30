@@ -2,15 +2,15 @@
   <div class="board">
     <div class="row-num">
       <div class="cell-num"></div>
-      <div v-for="j in 9" :key="`n${j}`" class="cell-num">
+      <div v-for="j in size" :key="`n${j}`" class="cell-num">
         {{j}}
       </div>
     </div>
-    <div v-for="i in 9" :key="`1${i}`" class="row">
+    <div v-for="i in size" :key="`1${i}`" :class="['row', 'row-' + size]">
       <div class="cell-num">
         {{i}}
       </div>
-      <div v-for="j in 9" :key="`2${j}`" class="cell" 
+      <div v-for="j in size" :key="`2${j}`" class="cell" 
         @mouseover="mouseOver(i, j)" 
         @mouseleave="mouseLeave(i, j)"
         @click="click(i, j)">
@@ -38,27 +38,32 @@ export default {
       type: Array,
       required: true,
       validator: values => {
-        return values && values.length === 9 && values[0].length === 9
+        return values && 
+        (values.length === 5 && values[0].length === 5) ||
+        (values.length === 9 && values[0].length === 9) ||
+        (values.length === 11 && values[0].length === 11) ||
+        (values.length === 13 && values[0].length === 13) ||
+        (values.length === 17 && values[0].length === 17) ||
+        (values.length === 19 && values[0].length === 19)
+      },
+    },
+    size: {
+      type: Number,
+      required: true,
+      validator: value => {
+        return value && 
+        value === 5 || value === 9 || value === 11 || value === 13 || value === 17 || value === 19
       },
     }
   },
-  data: () => ({
-    hoverValues: [
-      [false,false,false,false,false,false,false,false,false,false,false,false,false],
-      [false,false,false,false,false,false,false,false,false,false,false,false,false],
-      [false,false,false,false,false,false,false,false,false,false,false,false,false],
-      [false,false,false,false,false,false,false,false,false,false,false,false,false],
-      [false,false,false,false,false,false,false,false,false,false,false,false,false],
-      [false,false,false,false,false,false,false,false,false,false,false,false,false],
-      [false,false,false,false,false,false,false,false,false,false,false,false,false],
-      [false,false,false,false,false,false,false,false,false,false,false,false,false],
-      [false,false,false,false,false,false,false,false,false,false,false,false,false],
-      [false,false,false,false,false,false,false,false,false,false,false,false,false],
-      [false,false,false,false,false,false,false,false,false,false,false,false,false],
-      [false,false,false,false,false,false,false,false,false,false,false,false,false],
-      [false,false,false,false,false,false,false,false,false,false,false,false,false]
-    ]
-  }),
+  // data: () => ({
+  //   hoverValues: Array(this.size).fill(Array(this.size).fill(false))
+  // }),
+  computed: {
+    hoverValues() {
+      return Array.from({length: this.size}, () => Array(this.size).fill(false));
+    }
+  },
   methods: {
     mouseOver (i, j) {
       //make a copy of the row
@@ -99,7 +104,6 @@ export default {
   background-image: linear-gradient(to bottom, rgb(150, 150, 150) 1px, transparent 1px);
   background-color: transparent;
   background-size: 100% 1px;
-  background-position: calc(100%/9/2);
   .cell{
     background-image: linear-gradient(to right, rgb(150, 150, 150) 1px, transparent 1px);
     background-color: transparent;
@@ -109,6 +113,24 @@ export default {
     width: 100%;
     cursor: pointer;
   }
+}
+.row-5 {
+  background-position: calc(100%/5/2);
+}
+.row-9 {
+  background-position: calc(100%/9/2);
+}
+.row-11 {
+  background-position: calc(100%/11/2);
+}
+.row-13 {
+  background-position: calc(100%/13/2);
+}
+.row-17 {
+  background-position: calc(100%/17/2);
+}
+.row-19 {
+  background-position: calc(100%/19/2);
 }
 .row-num {
   width: 100%;

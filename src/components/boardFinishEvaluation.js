@@ -1,15 +1,13 @@
 
-const BOARD_LENGTH = 9;
-
 /**
  * Check if game is finished
  */
-export const isGameFinished = (newValues) => {
-  for (let y = 0; y < BOARD_LENGTH; y++) {
+export const isGameFinished = (newValues, boardSize) => {
+  for (let y = 0; y < boardSize; y++) {
     const row = newValues[y];
-    for (let x = 0; x < BOARD_LENGTH; x++) {
+    for (let x = 0; x < boardSize; x++) {
       const val = row[x];
-      if (!isFieldDetermined(newValues, val, y, x)) {
+      if (!isFieldDetermined(newValues, val, y, x, boardSize)) {
         return false;
       }
     }
@@ -20,15 +18,15 @@ export const isGameFinished = (newValues) => {
 /**
  * Check if field has inserted stone or around are just one color stones
  */
-export const isFieldDetermined = (newValues, val, yVal, xVal) => {
+export const isFieldDetermined = (newValues, val, yVal, xVal, boardSize) => {
   // Check if is filled with any stone
   if (val !== 0) {
     return true;
   }
-  return isFieldSurroundedByJustOneColor(newValues, yVal, xVal)
+  return isFieldSurroundedByJustOneColor(newValues, yVal, xVal, boardSize)
 }
 
-export const isFieldSurroundedByJustOneColor = (newValues, yVal, xVal) => {
+export const isFieldSurroundedByJustOneColor = (newValues, yVal, xVal, boardSize) => {
   let isNeighborChecked = false;
   let isWhiteNeighbor = false;
   let isBlackNeighbor = false;
@@ -44,7 +42,7 @@ export const isFieldSurroundedByJustOneColor = (newValues, yVal, xVal) => {
     isNeighborChecked = true;
   }
   // Check right
-  if (xVal !== BOARD_LENGTH-1) {
+  if (xVal !== boardSize-1) {
     if (newValues[yVal][xVal+1] === 0) {
       return false;
     } else if (newValues[yVal][xVal+1] === 1) {
@@ -61,7 +59,7 @@ export const isFieldSurroundedByJustOneColor = (newValues, yVal, xVal) => {
     isNeighborChecked = true;
   }
   // Check bottom
-  if (yVal !== BOARD_LENGTH-1) {
+  if (yVal !== boardSize-1) {
     if (newValues[yVal+1][xVal] === 0) {
       return false;
     } else if (newValues[yVal+1][xVal] === 1) {
@@ -102,15 +100,15 @@ export const isFieldSurroundedByJustOneColor = (newValues, yVal, xVal) => {
  * Evaluate how many stones each user have, including surrounded empty fileds
  * USE IT JUST WHEN GAME IS FINISHED - it is optimized for this case and otherwise it may return wrong results
  */
-export const checkFinalPoints = (newValues) => {
+export const checkFinalPoints = (newValues, boardSize) => {
   let whitePoints = 0;
   let blackPoints = 0;
 
-  for (let y = 0; y < BOARD_LENGTH; y++) {
+  for (let y = 0; y < boardSize; y++) {
     const row = newValues[y];
-    for (let x = 0; x < BOARD_LENGTH; x++) {
+    for (let x = 0; x < boardSize; x++) {
       const val = row[x];
-      const finalColorVal = checkFinalFieldPoint(newValues, val, y, x)
+      const finalColorVal = checkFinalFieldPoint(newValues, val, y, x, boardSize)
       if (finalColorVal === 1) {
         whitePoints++
       } else {
@@ -125,7 +123,7 @@ export const checkFinalPoints = (newValues) => {
  * Determine for what color the point for this field should be assigned
  * USE IT JUST WHEN GAME IS FINISHED - it is optimized for this case and otherwise it may return wrong results
  */
-const checkFinalFieldPoint = (newValues, val, yVal, xVal) => {
+const checkFinalFieldPoint = (newValues, val, yVal, xVal, boardSize) => {
   if (val === 1) {
     return 1;
   } else if (val === 2) {
@@ -136,11 +134,11 @@ const checkFinalFieldPoint = (newValues, val, yVal, xVal) => {
       return newValues[yVal-1][xVal] === 1 ? 1 : 2
     }
     // Check right
-    else if (xVal !== BOARD_LENGTH-1) {
+    else if (xVal !== boardSize-1) {
       return newValues[yVal][xVal+1] === 1 ? 1 : 2
     } 
     // Check bottom
-    else if (yVal !== BOARD_LENGTH-1) {
+    else if (yVal !== boardSize-1) {
       return newValues[yVal+1][xVal] === 1 ? 1 : 2
     } 
     // Check left

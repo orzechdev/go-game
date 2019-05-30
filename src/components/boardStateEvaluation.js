@@ -2,22 +2,20 @@
 
 import { direction } from "./boardConsts";
 
-const BOARD_LENGTH = 9;
-
-export const evaluateBoard = (newValues) => {
+export const evaluateBoard = (newValues, boardSize) => {
   let valuesWereChanged = false;
   let valuesAreChanged = false;
   // Opponent values might be surrounded in more then one place, thus need to be calculated as much time as possible
   do {
     valuesAreChanged = false;
     // Iterate over the whole board
-    for (let y = 0; y < BOARD_LENGTH; y++) {
+    for (let y = 0; y < boardSize; y++) {
       const row = newValues[y];
       let isChanged = false;
-      for (let x = 0; x < BOARD_LENGTH; x++) {
+      for (let x = 0; x < boardSize; x++) {
         const val = row[x];
         if (val != 0) {
-          let [currentValuesChanged, evaluatedValues] = evaluateCurrentValue(newValues, val, y, x)
+          let [currentValuesChanged, evaluatedValues] = evaluateCurrentValue(newValues, val, y, x, boardSize)
           isChanged = currentValuesChanged;
           // console.log(currentValuesChanged)
           if (currentValuesChanged) {
@@ -40,7 +38,7 @@ export const evaluateBoard = (newValues) => {
 /**
  * Check if the current stone in given place is surrounded by opponent's stones
  */
-const evaluateCurrentValue = (newValues, val, yVal, xVal) => {
+const evaluateCurrentValue = (newValues, val, yVal, xVal, boardSize) => {
   const opponentColor = val === 1 ? 2 : 1;
   let valuesAreChanged = false;
   // let checkedValues = [
@@ -58,7 +56,7 @@ const evaluateCurrentValue = (newValues, val, yVal, xVal) => {
   if (yVal != 0) {
     if (newValues[yVal-1][xVal] === opponentColor) {
       // console.log(`p 1 val:${val} yVal:${yVal} xVal:${xVal}`)
-      let [isSorrounded, obtainedValues] = evaluateOpponentValue(newValues, val, yVal-1, xVal, direction.BOTTOM)
+      let [isSorrounded, obtainedValues] = evaluateOpponentValue(newValues, val, yVal-1, xVal, direction.BOTTOM, boardSize)
       if (isSorrounded) {
         valuesAreChanged = true;
         // console.log('pass 1')
@@ -67,10 +65,10 @@ const evaluateCurrentValue = (newValues, val, yVal, xVal) => {
     }
   }
   // Check right
-  if (xVal !== BOARD_LENGTH-1) {
+  if (xVal !== boardSize-1) {
     if (newValues[yVal][xVal+1] === opponentColor) {
       // console.log(`p 2 val:${val} yVal:${yVal} xVal:${xVal}`)
-      let [isSorrounded, obtainedValues] = evaluateOpponentValue(newValues, val, yVal, xVal+1, direction.LEFT)
+      let [isSorrounded, obtainedValues] = evaluateOpponentValue(newValues, val, yVal, xVal+1, direction.LEFT, boardSize)
       if (isSorrounded) {
         valuesAreChanged = true;
         // console.log('pass 2')
@@ -79,10 +77,10 @@ const evaluateCurrentValue = (newValues, val, yVal, xVal) => {
     }
   }
   // Check bottom
-  if (yVal !== BOARD_LENGTH-1) {
+  if (yVal !== boardSize-1) {
     if (newValues[yVal+1][xVal] === opponentColor) {
       // console.log(`p 3 val:${val} yVal:${yVal} xVal:${xVal}`)
-      let [isSorrounded, obtainedValues] = evaluateOpponentValue(newValues, val, yVal+1, xVal, direction.TOP)
+      let [isSorrounded, obtainedValues] = evaluateOpponentValue(newValues, val, yVal+1, xVal, direction.TOP, boardSize)
       if (isSorrounded) {
         valuesAreChanged = true;
         // console.log('pass 3')
@@ -94,7 +92,7 @@ const evaluateCurrentValue = (newValues, val, yVal, xVal) => {
   if (xVal != 0) {
     if (newValues[yVal][xVal-1] === opponentColor) {
       // console.log(`p 4 val:${val} yVal:${yVal} xVal:${xVal}`)
-      let [isSorrounded, obtainedValues] = evaluateOpponentValue(newValues, val, yVal, xVal-1, direction.RIGHT)
+      let [isSorrounded, obtainedValues] = evaluateOpponentValue(newValues, val, yVal, xVal-1, direction.RIGHT, boardSize)
       if (isSorrounded) {
         valuesAreChanged = true;
         // console.log('pass 4')
@@ -107,17 +105,9 @@ const evaluateCurrentValue = (newValues, val, yVal, xVal) => {
 }
 
 // If it will be refactored, probably possible to remove prevDirection and use just checkedValues
-const evaluateOpponentValue = (newValues, val, yVal, xVal, prevDirection, checkedValuesMap = [
-  [0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0],
-]) => {
+const evaluateOpponentValue = (newValues, val, yVal, xVal, prevDirection, boardSize, checkedValuesMap) => {
+  if (!checkedValuesMap)
+    checkedValuesMap = Array.from({length: boardSize}, () => Array(boardSize).fill(0));
   // let checkedValuesMap = [
   //   [0,0,0,0,0,0,0,0,0],
   //   [0,0,0,0,0,0,0,0,0],
@@ -139,7 +129,7 @@ const evaluateOpponentValue = (newValues, val, yVal, xVal, prevDirection, checke
   if (yVal != 0 && prevDirection !== direction.TOP && checkedValuesMap[yVal-1][xVal] != 1) {
     // console.log(`eov val:${val} yVal:${yVal} xVal:${xVal} prevDirect:${prevDirection} 1`)
     if (evaluatedValues[yVal-1][xVal] === opponentColor) {
-      let [isSorrounded, obtainedValues, checkedValuesObtained] = evaluateOpponentValue(evaluatedValues, val, yVal-1, xVal, direction.BOTTOM, checkedValuesMap.map(arr => arr.slice()))
+      let [isSorrounded, obtainedValues, checkedValuesObtained] = evaluateOpponentValue(evaluatedValues, val, yVal-1, xVal, direction.BOTTOM, boardSize, checkedValuesMap.map(arr => arr.slice()))
       if (!isSorrounded) {
         return [false, newValues];
       }
@@ -150,10 +140,10 @@ const evaluateOpponentValue = (newValues, val, yVal, xVal, prevDirection, checke
     }
   }
   // Check right
-  if (xVal !== BOARD_LENGTH-1 && prevDirection !== direction.RIGHT && checkedValuesMap[yVal][xVal+1] != 1) {
+  if (xVal !== boardSize-1 && prevDirection !== direction.RIGHT && checkedValuesMap[yVal][xVal+1] != 1) {
     // console.log(`eov val:${val} yVal:${yVal} xVal:${xVal} prevDirect:${prevDirection} 2`)
     if (evaluatedValues[yVal][xVal+1] === opponentColor) {
-      let [isSorrounded, obtainedValues, checkedValuesObtained] = evaluateOpponentValue(evaluatedValues, val, yVal, xVal+1, direction.LEFT, checkedValuesMap.map(arr => arr.slice()))
+      let [isSorrounded, obtainedValues, checkedValuesObtained] = evaluateOpponentValue(evaluatedValues, val, yVal, xVal+1, direction.LEFT, boardSize, checkedValuesMap.map(arr => arr.slice()))
       if (!isSorrounded) {
         return [false, newValues];
       }
@@ -164,10 +154,10 @@ const evaluateOpponentValue = (newValues, val, yVal, xVal, prevDirection, checke
     }
   }
   // Check bottom
-  if (yVal !== BOARD_LENGTH-1 && prevDirection !== direction.BOTTOM && checkedValuesMap[yVal+1][xVal] != 1) {
+  if (yVal !== boardSize-1 && prevDirection !== direction.BOTTOM && checkedValuesMap[yVal+1][xVal] != 1) {
     // console.log(`eov val:${val} yVal:${yVal} xVal:${xVal} prevDirect:${prevDirection} 3`)
     if (evaluatedValues[yVal+1][xVal] === opponentColor) {
-      let [isSorrounded, obtainedValues, checkedValuesObtained] = evaluateOpponentValue(evaluatedValues, val, yVal+1, xVal, direction.TOP, checkedValuesMap.map(arr => arr.slice()))
+      let [isSorrounded, obtainedValues, checkedValuesObtained] = evaluateOpponentValue(evaluatedValues, val, yVal+1, xVal, direction.TOP, boardSize, checkedValuesMap.map(arr => arr.slice()))
       if (!isSorrounded) {
         return [false, newValues];
       }
@@ -181,7 +171,7 @@ const evaluateOpponentValue = (newValues, val, yVal, xVal, prevDirection, checke
   if (xVal != 0 && prevDirection !== direction.LEFT && checkedValuesMap[yVal][xVal-1] != 1) {
     // console.log(`eov val:${val} yVal:${yVal} xVal:${xVal} prevDirect:${prevDirection} 4`)
     if (evaluatedValues[yVal][xVal-1] === opponentColor) {
-      let [isSorrounded, obtainedValues, checkedValuesObtained] = evaluateOpponentValue(evaluatedValues, val, yVal, xVal-1, direction.RIGHT, checkedValuesMap.map(arr => arr.slice()))
+      let [isSorrounded, obtainedValues, checkedValuesObtained] = evaluateOpponentValue(evaluatedValues, val, yVal, xVal-1, direction.RIGHT, boardSize, checkedValuesMap.map(arr => arr.slice()))
       if (!isSorrounded) {
         return [false, newValues];
       }
