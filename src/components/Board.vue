@@ -3,7 +3,7 @@
     <div class="row-num">
       <div class="cell-num"></div>
       <div v-for="j in size" :key="`n${j}`" class="cell-num">
-        {{j}}
+        {{ALPHABET[j]}}
       </div>
     </div>
     <div v-for="i in size" :key="`1${i}`" :class="['row', 'row-' + size]">
@@ -56,12 +56,15 @@ export default {
       },
     }
   },
-  // data: () => ({
-  //   hoverValues: Array(this.size).fill(Array(this.size).fill(false))
-  // }),
-  computed: {
-    hoverValues() {
-      return Array.from({length: this.size}, () => Array(this.size).fill(false));
+  data() {
+    return {
+      ALPHABET: 'abcdefghijklmnopqrstuvwxyz',
+      hoverValues: Array.from({length: this.size}, () => Array(this.size).fill(false))
+    }
+  },
+  watch: {
+    size (newSize) { 
+      this.hoverValues = Array.from({length: newSize}, () => Array(newSize).fill(false))
     }
   },
   methods: {

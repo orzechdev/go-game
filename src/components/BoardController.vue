@@ -67,45 +67,47 @@ export default {
   components: {
     Board
   },
-  data: () => ({
-    /**
-     * 1 - white
-     * 2 - black
-     */
-    currentColor: 1,
-    values: Array.from({length: 5}, () => Array(5).fill(0)),
-    //[[0,0,0,0,0,0,0,0,0],[0,2,2,2,1,0,0,0,0],[0,2,2,0,2,1,0,0,0],[0,0,2,1,0,1,0,0,0],[0,0,1,0,1,0,0,0,0],[0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0]]
-    // [[2,0,2,2,2,1,1,0,1],[2,2,2,0,1,2,2,1,0],[2,0,2,1,0,1,2,2,2],[2,2,0,1,1,0,1,1,0],[1,2,1,0,1,1,2,2,1],[1,1,0,0,1,2,2,0,2],[2,2,2,1,0,1,1,2,0],[1,1,1,0,1,0,2,2,2],[1,0,1,1,1,2,2,0,2]]
-    // [
-    //   [0,0,0,0,0,0,0,0,0],
-    //   [0,0,0,0,0,0,0,0,0],
-    //   [0,0,0,0,0,0,0,0,0],
-    //   [0,0,0,0,0,0,0,0,0],
-    //   [0,0,0,0,0,0,0,0,0],
-    //   [0,0,0,0,0,0,0,0,0],
-    //   [0,0,0,0,0,0,0,0,0],
-    //   [0,0,0,0,0,0,0,0,0],
-    //   [0,0,0,0,0,0,0,0,0],
-    // ],
-    calculationDepths: [1, 2, 3],
-    calculationDepthSelected: 2,
-    firstPlayerCalculationTimes: [],
-    secondPlayerCalculationTimes: [],
-    firstPlayerTestGameCalculationTimes: [],
-    secondPlayerTestGameCalculationTimes: [],
-    testGameWonsPlayerColors: [],
-    testGameWonsPlayers_FOR_HELP_TO_DETERMINE_PLAYERS: Array.from({length: 3}, () => Array(3).fill(0)),
-    testGamesValuesForWhiteForDepths: Array.from({length: 3}, () => Array(3).fill(0)),
-    testGamesTimesForDepths: Array(3).fill(0),
-    ALLtestGamesValuesForWhiteForDepths: Array.from({length: 3}, () => Array.from({length: 3}, () => Array(5).fill(0))),
-    ALLtestGamesTimesForDepths: Array.from({length: 3}, () => Array(5).fill(0)),
-    MEANtestGamesValuesForWhiteForDepths: Array.from({length: 3}, () => Array(3).fill(0)),
-    MEANtestGamesTimesForDepths: Array(3).fill(0),
-    boardSizes: [19, 17, 13, 11, 9, 5],
-    boardSizeSelected: 5,
-    algorithmsTypes: [algorithmsTypes.MIN_MAX, algorithmsTypes.MIN_MAX_A_B],
-    algorithmsTypeSelected: algorithmsTypes.MIN_MAX_A_B
-  }),
+  data() {
+    return {
+      /**
+       * 1 - white
+       * 2 - black
+       */
+      currentColor: 1,
+      values: Array.from({length: 5}, () => Array(5).fill(0)),
+      //[[0,0,0,0,0,0,0,0,0],[0,2,2,2,1,0,0,0,0],[0,2,2,0,2,1,0,0,0],[0,0,2,1,0,1,0,0,0],[0,0,1,0,1,0,0,0,0],[0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0]]
+      // [[2,0,2,2,2,1,1,0,1],[2,2,2,0,1,2,2,1,0],[2,0,2,1,0,1,2,2,2],[2,2,0,1,1,0,1,1,0],[1,2,1,0,1,1,2,2,1],[1,1,0,0,1,2,2,0,2],[2,2,2,1,0,1,1,2,0],[1,1,1,0,1,0,2,2,2],[1,0,1,1,1,2,2,0,2]]
+      // [
+      //   [0,0,0,0,0,0,0,0,0],
+      //   [0,0,0,0,0,0,0,0,0],
+      //   [0,0,0,0,0,0,0,0,0],
+      //   [0,0,0,0,0,0,0,0,0],
+      //   [0,0,0,0,0,0,0,0,0],
+      //   [0,0,0,0,0,0,0,0,0],
+      //   [0,0,0,0,0,0,0,0,0],
+      //   [0,0,0,0,0,0,0,0,0],
+      //   [0,0,0,0,0,0,0,0,0],
+      // ],
+      calculationDepths: [1, 2, 3],
+      calculationDepthSelected: 2,
+      firstPlayerCalculationTimes: [],
+      secondPlayerCalculationTimes: [],
+      firstPlayerTestGameCalculationTimes: [],
+      secondPlayerTestGameCalculationTimes: [],
+      testGameWonsPlayerColors: [],
+      testGameWonsPlayers_FOR_HELP_TO_DETERMINE_PLAYERS: Array.from({length: 3}, () => Array(3).fill(0)),
+      testGamesValuesForWhiteForDepths: Array.from({length: 3}, () => Array(3).fill(0)),
+      testGamesTimesForDepths: Array(3).fill(0),
+      ALLtestGamesValuesForWhiteForDepths: Array.from({length: 3}, () => Array.from({length: 3}, () => Array(5).fill(0))),
+      ALLtestGamesTimesForDepths: Array.from({length: 3}, () => Array(5).fill(0)),
+      MEANtestGamesValuesForWhiteForDepths: Array.from({length: 3}, () => Array(3).fill(0)),
+      MEANtestGamesTimesForDepths: Array(3).fill(0),
+      boardSizes: [19, 17, 13, 11, 9, 5],
+      boardSizeSelected: 5,
+      algorithmsTypes: [algorithmsTypes.MIN_MAX, algorithmsTypes.MIN_MAX_A_B],
+      algorithmsTypeSelected: algorithmsTypes.MIN_MAX_A_B
+    }
+  },
   methods: {
     changeBoardSize (size) {
       this.values = Array.from({length: size}, () => Array(size).fill(0))
