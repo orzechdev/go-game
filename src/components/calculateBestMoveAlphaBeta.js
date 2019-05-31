@@ -85,6 +85,9 @@ const calculateMovesOutcomes = (currValues, playerColor, boardSize, depthIterati
          */
         return beta
       }
+      if (deeperAlpha.outcome > calculatedOutcome.outcome) {
+        deeperAlpha = {outcome: calculatedOutcome.outcome, y: calculatedOutcome.y, x: calculatedOutcome.x}
+      }
     } else {
       // console.log(`ODD iter${depthIteration}`)
       // alpha = movesOutcomes[i].outcome > alpha ? movesOutcomes[i].outcome : alpha
@@ -98,12 +101,9 @@ const calculateMovesOutcomes = (currValues, playerColor, boardSize, depthIterati
          */
         return alpha
       }
-    }
-    if (deeperBeta.outcome < calculatedOutcome.outcome) {
-      deeperBeta = {outcome: calculatedOutcome.outcome, y: calculatedOutcome.y, x: calculatedOutcome.x}
-    }
-    if (deeperAlpha.outcome > calculatedOutcome.outcome) {
-      deeperAlpha = {outcome: calculatedOutcome.outcome, y: calculatedOutcome.y, x: calculatedOutcome.x}
+      if (deeperBeta.outcome < calculatedOutcome.outcome) {
+        deeperBeta = {outcome: calculatedOutcome.outcome, y: calculatedOutcome.y, x: calculatedOutcome.x}
+      }
     }
   }
 

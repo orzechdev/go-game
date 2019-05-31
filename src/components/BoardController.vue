@@ -87,7 +87,7 @@ export default {
     //   [0,0,0,0,0,0,0,0,0],
     //   [0,0,0,0,0,0,0,0,0],
     // ],
-    calculationDepths: [1, 2, 3, 4],
+    calculationDepths: [1, 2, 3],
     calculationDepthSelected: 2,
     firstPlayerCalculationTimes: [],
     secondPlayerCalculationTimes: [],
