@@ -1,6 +1,16 @@
-# vue-game
+# Go Game with Vue
 
-## Project setup
+## To do
+- fix alpha-beta pruning for min-max algorithm, as it doesn't work correctly
+- rewrite algorithms' code into code which operates on bits instead of arrays of integers - processor would operate on them much more faster
+- implement [Monte-Carlo Tree Search](https://en.wikipedia.org/wiki/Monte_Carlo_tree_search) ???
+
+## Project setup through Vue GUI CLI
+```
+vue ui
+```
+
+## Project setup (instead of Vue GUI CLI)
 ```
 yarn install
 ```
