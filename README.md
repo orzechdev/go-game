@@ -4,7 +4,7 @@
 * [Game description](#game-description)
 * [How the algorithm works](#how-the-algorithm-works)
   * [Min-max algorithm](#min-max-algorithm)
-  * [Min-max algorithm with alpha-beta pruning](min-max-algorithm-with-alpha-beta-pruning)
+  * [Min-max algorithm with alpha-beta pruning](#min-max-algorithm-with-alpha-beta-pruning)
 * [Description of chosen evaluation function](#description-of-chosen-evaluation-function)
 * [Description of chosen available move generation function](#description-of-chosen-available-move-generation-function)
 * [Test the implementation of min-max algorithm playing against each other](#test-the-implementation-of-min-max-algorithm-playing-against-each-other)
