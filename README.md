@@ -22,7 +22,7 @@
 
 ## Game description
 
-In this application you can play against computer in Go Game - probably teh oldest board game invented in China. 
+In this application you can play against computer in Go Game - probably the oldest board game invented in China. 
 
 Ths application has implemented AI algorithm called min-max. One can start playing against it by selecting board size and calculation depth (the depth of min-max tree). I hope some functionality will be added later and the algorithm will be improved.
 
@@ -83,6 +83,7 @@ White/black colors represents if mean outcome >= 0, then player with white stone
 
 - Fix alpha-beta pruning for min-max algorithm, as it doesn't work correctly.
 - Rewrite algorithms' code into code which operates on bits instead of arrays of integers - processor would operate on them much more faster.
+- Refactor code
 - Implement [Monte-Carlo Tree Search](https://en.wikipedia.org/wiki/Monte_Carlo_tree_search) ???
 - Multiplayer offline as well as online.
 
