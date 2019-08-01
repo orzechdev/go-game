@@ -17,8 +17,8 @@
 
 ## Used technologies
 * JavaScript
-* Vue
-* Vuetify
+* [Vue.js](https://github.com/vuejs/vue)
+* [Vuetify](https://github.com/vuetifyjs/vuetify)
 
 ## Game description
 
