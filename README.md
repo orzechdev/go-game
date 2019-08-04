@@ -115,6 +115,22 @@ yarn run serve
 ```
 yarn run build
 ```
+In order to let working web app with app on Google Play remember to check if following files exists in dist and on branch gh-pages:
+* (due to Github pages do not include dot files) empty `.nojekyll`
+* (due to Github pages do not include dot files) `_config.yml` with:
+```
+include: [".well-known", "launch.json"]
+```
+* `.well-known/assetlinks.json` with:
+```
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target" : { "namespace": "android_app", "package_name": "com.orzechdev.gogame",
+               "sha256_cert_fingerprints": ["CB:78:1F:3D:E5:09:64:EE:86:B6:A3:3F:B0:00:65:CF:67:1B:54:FB:60:0F:81:0A:C0:3A:C8:C6:48:86:0E:F9"] }
+}]
+```
+* `privacy-policy-google-play.html` rferenced on Google Play listing 
+
 
 ### Run your tests
 ```
