@@ -1,15 +1,18 @@
 {
-  "name": "vue-game",
+  "name": "go-game",
+  "homepage": "https://orzechdev.github.io/go-game",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@vue/cli": "^3.7.0",
     "core-js": "^2.6.5",
+    "gh-pages": "2.0",
     "global": "^4.3.2",
     "register-service-worker": "^1.6.2",
     "sass": "^1.19.0",
