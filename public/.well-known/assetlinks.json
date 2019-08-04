@@ -1,0 +1,5 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target" : { "namespace": "android_app", "package_name": "com.orzechdev.gogame",
+               "sha256_cert_fingerprints": ["CB:78:1F:3D:E5:09:64:EE:86:B6:A3:3F:B0:00:65:CF:67:1B:54:FB:60:0F:81:0A:C0:3A:C8:C6:48:86:0E:F9"] }
+}]
