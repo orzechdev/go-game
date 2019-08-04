@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Play from './views/Play.vue'
-import Settings from './views/Settings.vue'
+import Preferences from './views/Preferences.vue'
 
 Vue.use(Router)
 
@@ -14,13 +14,13 @@ export default new Router({
       component: Play
     },
     {
-      path: '/settings',
-      name: 'settings',
+      path: '/preferences',
+      name: 'preferences',
       // route level code-splitting
-      // this generates a separate chunk (settings.[hash].js) for this route
+      // this generates a separate chunk (preferences.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      // component: () => import(/* webpackChunkName: "settings" */ './views/Settings.vue')
-      component: Settings
+      // component: () => import(/* webpackChunkName: "preferences" */ './views/Preferences.vue')
+      component: Preferences
     }
   ]
 })

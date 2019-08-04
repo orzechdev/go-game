@@ -16,8 +16,8 @@
         <v-icon>play_circle_filled</v-icon>
       </v-btn>
 
-      <v-btn color="primary" flat value="settings" to="/settings">
-        <span class="font-weight-bold">Settings</span>
+      <v-btn color="primary" flat value="preferences" to="/preferences">
+        <span class="font-weight-bold">Preferences</span>
         <v-icon>settings</v-icon>
       </v-btn>
     </v-bottom-nav>

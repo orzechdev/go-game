@@ -33,19 +33,37 @@
         :label="`Developer options: ${developerOptions ? 'on' : 'off'}`"
       ></v-switch>
     </v-flex>
+    <v-flex xs12 sm6 class="button-container">
+      <v-divider></v-divider>
+    </v-flex>
+    <v-flex xs12 sm6 class="button-container">
+      <v-list-tile avatar @click.stop="showPrivacyPolicy = true" class="privacy-policy">
+        <v-list-tile-action>
+          <v-icon>book</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-content>
+          <v-list-tile-title>Show privacy policy</v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
+      <privacy-policy-dialog
+        :show="showPrivacyPolicy"
+        :privacyPolicyEntityName="`Go Game`"
+        @onCloseClick="showPrivacyPolicy = false">
+      </privacy-policy-dialog>
+    </v-flex>
   </v-content>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
 // @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue'
+import PrivacyPolicyDialog from '@/components/PrivacyPolicyDialog.vue'
 import { algorithmsTypes } from "@/components/BoardController.vue"
 
 export default {
   name: "home",
   components: {
-    // HelloWorld
+    PrivacyPolicyDialog
   },
   computed: {
     ...mapState([
@@ -60,6 +78,7 @@ export default {
       calculationDepths: [1, 2, 3],
       boardSizes: [19, 17, 13, 11, 9, 5],
       algorithmsTypes: [algorithmsTypes.MIN_MAX, algorithmsTypes.MIN_MAX_A_B],
+      showPrivacyPolicy: false,
     }
   },
   methods: {
@@ -79,5 +98,8 @@ export default {
   }
   .button-container {
     margin: 30px auto;
+  }
+  .privacy-policy > a {
+    padding: 0;
   }
 </style>
