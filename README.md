@@ -13,6 +13,8 @@
 * [Project setup through Vue GUI CLI](#project-setup-through-vue-gui-cli)
 * [Project setup (instead of Vue GUI CLI)](#project-setup-instead-of-vue-gui-cli)
 
+You can play here: https://orzechdev.github.io/go-game
+
 ![User interface 1](readme-files/app-ui-1.png) ![User interface 2](readme-files/app-ui-2.png)
 
 ## Used technologies
