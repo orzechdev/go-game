@@ -13,7 +13,7 @@
 * [Project setup through Vue GUI CLI](#project-setup-through-vue-gui-cli)
 * [Project setup (instead of Vue GUI CLI)](#project-setup-instead-of-vue-gui-cli)
 
-You can play here: https://orzechdev.github.io/go-game
+You can play here https://orzechdev.github.io/go-game or you can add app to the main screen of mobile phone and play also offline.
 
 ![User interface 1](readme-files/app-ui-1.png) ![User interface 2](readme-files/app-ui-2.png)
 
@@ -23,6 +23,7 @@ You can play here: https://orzechdev.github.io/go-game
 * [Vuetify](https://github.com/vuetifyjs/vuetify)
 * [Vuex](https://github.com/vuejs/vuex)
 * [Vue Router](https://github.com/vuejs/vue-router)
+* [PWA](https://en.wikipedia.org/wiki/Progressive_web_applications)
 
 ## Game description
 
