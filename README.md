@@ -15,7 +15,7 @@
 
 You can play here https://orzechdev.github.io/go-game or you can add app to the main screen of mobile phone and play also offline.
 
-![User interface 1](readme-files/app-ui-1.png) ![User interface 2](readme-files/app-ui-2.png)
+![User interface 1](readme-files/app-ui-screen-1.png) ![User interface 2](readme-files/app-ui-screen-2.png)
 
 ## Used technologies
 * JavaScript
