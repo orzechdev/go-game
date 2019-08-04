@@ -13,12 +13,14 @@
 * [Project setup through Vue GUI CLI](#project-setup-through-vue-gui-cli)
 * [Project setup (instead of Vue GUI CLI)](#project-setup-instead-of-vue-gui-cli)
 
-![User interface](readme-files/ui-1.png)
+![User interface 1](readme-files/ui-1.png) | ![User interface 2](readme-files/ui-2.png)
 
 ## Used technologies
 * JavaScript
 * [Vue.js](https://github.com/vuejs/vue)
 * [Vuetify](https://github.com/vuetifyjs/vuetify)
+* [Vuex](https://github.com/vuejs/vuex)
+* [Vue Router](https://github.com/vuejs/vue-router)
 
 ## Game description
 
