@@ -12,6 +12,7 @@
           <v-btn color="white" @click="changeToWhite">White</v-btn>
           <v-btn color="black" class="white-text" @click="changeToBlack">Black</v-btn>
         </v-flex>
+        <!-- TODO: remove start from here -->
         <v-flex xs12 sm6 class="button-container">
           <v-select
             v-model="boardSizeSelected"
@@ -35,6 +36,7 @@
             :error-messages="calculationDepthSelected < 3 ? [] : 'Selected depth can significantly increase the calculation time and cause the browser to hang!'"
           ></v-select>
         </v-flex>
+        <!-- TODO: remove ends here -->
         <v-flex class="button-container">
           <v-btn @click="emptyBoard">Empty board</v-btn>
         </v-flex>
@@ -58,7 +60,7 @@ import { calculateMinMaxMove } from "./calculateBestMove"
 import { calculateMinMaxAlphaBetaPrunedMove } from "./calculateBestMoveAlphaBeta"
 import { getRandomInt } from "./boardTest"
 
-const algorithmsTypes = {
+export const algorithmsTypes = {
   MIN_MAX: 'min-max',
   MIN_MAX_A_B: 'min-max (alpha-beta pruning)',
 }
@@ -66,6 +68,29 @@ const algorithmsTypes = {
 export default {
   components: {
     Board
+  },
+  props: {
+    calculationDepthSelected: {
+      type: Number,
+      required: true,
+      validator: value => {
+        return value && [1, 2, 3].includes(value)
+      },
+    },
+    algorithmsTypeSelected: {
+      type: String,
+      required: true,
+      validator: value => {
+        return value && [algorithmsTypes.MIN_MAX, algorithmsTypes.MIN_MAX_A_B].includes(value)
+      },
+    },
+    boardSizeSelected: {
+      type: Number,
+      required: true,
+      validator: value => {
+        return value && [19, 17, 13, 11, 9, 5].includes(value)
+      },
+    }
   },
   data() {
     return {
@@ -89,7 +114,7 @@ export default {
       //   [0,0,0,0,0,0,0,0,0],
       // ],
       calculationDepths: [1, 2, 3],
-      calculationDepthSelected: 2,
+      // calculationDepthSelected: 2,
       firstPlayerCalculationTimes: [],
       secondPlayerCalculationTimes: [],
       firstPlayerTestGameCalculationTimes: [],
@@ -103,9 +128,9 @@ export default {
       MEANtestGamesValuesForWhiteForDepths: Array.from({length: 3}, () => Array(3).fill(0)),
       MEANtestGamesTimesForDepths: Array(3).fill(0),
       boardSizes: [19, 17, 13, 11, 9, 5],
-      boardSizeSelected: 5,
+      // boardSizeSelected: 5,
       algorithmsTypes: [algorithmsTypes.MIN_MAX, algorithmsTypes.MIN_MAX_A_B],
-      algorithmsTypeSelected: algorithmsTypes.MIN_MAX_A_B
+      // algorithmsTypeSelected: algorithmsTypes.MIN_MAX_A_B
     }
   },
   methods: {

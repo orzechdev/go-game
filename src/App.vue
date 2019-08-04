@@ -8,43 +8,15 @@
       </v-btn>
     </v-toolbar>
 
-    <v-content>
-      <board-controller
-        @onFinishGame="onFinishGame"
-        ref="boardControllerRef">
-      </board-controller>
-
-      <v-dialog v-model="finishDialog" max-width="290">
-        <v-card>
-          <v-card-title class="headline">{{finishDialogTitle}}</v-card-title>
-          <v-card-text>{{finishDialogDescription}}</v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn flat @click="finishDialog = false">Close</v-btn>
-            <v-btn flat color="primary" @click="onClickEmptyBoard">Empty board</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-      <v-dialog v-model="finishDialog" max-width="290">
-        <v-card>
-          <v-card-title class="headline">{{finishDialogTitle}}</v-card-title>
-          <v-card-text>{{finishDialogDescription}}</v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn flat @click="finishDialog = false">Close</v-btn>
-            <v-btn flat color="primary" @click="onClickEmptyBoard">Empty board</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </v-content>
+    <router-view></router-view>
 
     <v-bottom-nav :active.sync="bottomNav" :value="true" fixed color="white">
-      <v-btn color="primary" flat value="play">
+      <v-btn color="primary" flat value="play" to="/">
         <span class="font-weight-bold">Play</span>
         <v-icon>play_circle_filled</v-icon>
       </v-btn>
 
-      <v-btn color="primary" flat value="settings">
+      <v-btn color="primary" flat value="settings" to="/settings">
         <span class="font-weight-bold">Settings</span>
         <v-icon>settings</v-icon>
       </v-btn>
@@ -53,37 +25,12 @@
 </template>
 
 <script>
-import BoardController from "./components/BoardController.vue";
-
 export default {
   name: "App",
-  components: {
-    BoardController
-  },
   data() {
     return {
       bottomNav: 'play',
-      finishDialog: false,
-      finishDialogTitle: '',
-      finishDialogDescription: ''
     };
   },
-  methods: {
-    onFinishGame (whitePoints, blackPoints) {
-      this.finishDialog = true
-      if (whitePoints > blackPoints) {
-        this.finishDialogTitle = 'White stones won!'
-      } else if (whitePoints < blackPoints) {
-        this.finishDialogTitle = 'Black stones won!'
-      } else {
-        this.finishDialogTitle = 'Tie!'
-      }
-      this.finishDialogDescription = `Black points: ${blackPoints}, white points: ${whitePoints}`
-    },
-    onClickEmptyBoard () {
-      this.$refs.boardControllerRef.emptyBoard()
-      this.finishDialog = false
-    }
-  }
 };
 </script>
