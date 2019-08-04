@@ -22,5 +22,9 @@ self.__precacheManifest = [
   {
     "revision": "9ef3cebb666d8d64bb7e",
     "url": "/go-game/css/app.942e5cd4.css"
+  },
+  {
+    "revision": "e97c5f65dd692ca783b14d89589997db",
+    "url": "/go-game/.well-known/assetlinks.json"
   }
 ];
