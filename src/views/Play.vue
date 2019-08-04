@@ -1,9 +1,12 @@
 <template>
   <v-content>
     <board-controller
-      :calculationDepthSelected=2
-      :boardSizeSelected=5
+      :boardSizeSelected="boardSizeSelected"
       :algorithmsTypeSelected="algorithmsTypeSelected"
+      :calculationDepthSelected="calculationDepthSelected"
+      :values="boardValues"
+      @setBoardValues="setBoardValues"
+      :showTestOptions="developerOptions"
       @onFinishGame="onFinishGame"
       ref="boardControllerRef">
     </board-controller>
@@ -34,6 +37,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 import BoardController, { algorithmsTypes } from "@/components/BoardController.vue";
 
 export default {
@@ -46,10 +50,21 @@ export default {
       finishDialog: false,
       finishDialogTitle: '',
       finishDialogDescription: '',
-      algorithmsTypeSelected: algorithmsTypes.MIN_MAX,
     };
   },
+  computed: {
+    ...mapState([
+      'developerOptions',
+      'boardSizeSelected',
+      'algorithmsTypeSelected',
+      'calculationDepthSelected',
+      'boardValues',
+    ])
+  },
   methods: {
+    ...mapActions([
+      'setBoardValues',
+    ]),
     onFinishGame (whitePoints, blackPoints) {
       this.finishDialog = true
       if (whitePoints > blackPoints) {
@@ -64,7 +79,7 @@ export default {
     onClickEmptyBoard () {
       this.$refs.boardControllerRef.emptyBoard()
       this.finishDialog = false
-    }
+    },
   }
 };
 </script>
