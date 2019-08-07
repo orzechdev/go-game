@@ -15,6 +15,8 @@
 
 You can play here https://orzechdev.github.io/go-game or you can add app to the main screen of mobile phone and play also offline.
 
+Also you can download the app straight from Google Play store https://play.google.com/store/apps/details?id=com.orzechdev.gogame.
+
 ![User interface 1](readme-files/app-ui-screen-1.png) ![User interface 2](readme-files/app-ui-screen-2.png)
 
 ## Used technologies
@@ -23,7 +25,8 @@ You can play here https://orzechdev.github.io/go-game or you can add app to the 
 * [Vuetify](https://github.com/vuetifyjs/vuetify)
 * [Vuex](https://github.com/vuejs/vuex)
 * [Vue Router](https://github.com/vuejs/vue-router)
-* [PWA](https://en.wikipedia.org/wiki/Progressive_web_applications)
+* [PWA (Progressive Web App)](https://en.wikipedia.org/wiki/Progressive_web_applications)
+* [TWA (Trusted Web Activity)](https://developers.google.com/web/updates/2019/02/using-twa)
 
 ## Game description
 
