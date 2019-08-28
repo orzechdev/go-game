@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/go-game/precache-manifest.7d0e94aad900bf655b2bac41bae5c07a.js"
+  "/go-game/precache-manifest.1ce9ada8bdccbab00627c7801dee5b50.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "go-game"});
