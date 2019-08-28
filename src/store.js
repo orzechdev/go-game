@@ -1,13 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import { algorithmsTypes } from "@/components/BoardController.vue";
+import { algorithmsTypes, playerMode } from "@/components/BoardController.vue";
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
     developerOptions: false,
+    playerMode: playerMode.PLAYER_COMPUTER,
     boardSizeSelected: 5,
     algorithmsTypeSelected: algorithmsTypes.MIN_MAX_A_B,
     calculationDepthSelected: 2,
@@ -16,6 +17,9 @@ export default new Vuex.Store({
   mutations: {
     SET_DEVELOPER_OPTIONS (state, isOn) {
       state.developerOptions = isOn
+    },
+    SET_PLAYER_MODE (state, mode) {
+      state.playerMode = mode
     },
     SET_BOARD_SIZE (state, size) {
       state.boardSizeSelected = size
@@ -28,6 +32,9 @@ export default new Vuex.Store({
   actions: {
     setDeveloperOptions (context, isOn) {
       context.commit('SET_DEVELOPER_OPTIONS', isOn);
+    },
+    setPlayerMode (context, mode) {
+      context.commit('SET_PLAYER_MODE', mode);
     },
     setBoardSizeSelected (context, size) {
       context.commit('SET_BOARD_SIZE', size);

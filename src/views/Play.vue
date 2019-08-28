@@ -6,6 +6,8 @@
       :calculationDepthSelected="calculationDepthSelected"
       :values="boardValues"
       @setBoardValues="setBoardValues"
+      :playerMode="playerMode"
+      @changePlayerMode="setPlayerMode"
       :showTestOptions="developerOptions"
       @onFinishGame="onFinishGame"
       ref="boardControllerRef">
@@ -55,6 +57,7 @@ export default {
   computed: {
     ...mapState([
       'developerOptions',
+      'playerMode',
       'boardSizeSelected',
       'algorithmsTypeSelected',
       'calculationDepthSelected',
@@ -63,6 +66,7 @@ export default {
   },
   methods: {
     ...mapActions([
+      'setPlayerMode',
       'setBoardValues',
     ]),
     onFinishGame (whitePoints, blackPoints) {

@@ -12,6 +12,17 @@
           <v-btn color="white" @click="changeToWhite">White</v-btn>
           <v-btn color="black" class="white-text" @click="changeToBlack">Black</v-btn>
         </v-flex>
+        
+        <v-flex class="button-container">
+          <v-btn-toggle :value="playerMode" @change="changePlayerMode">
+            <v-btn text value="player-computer">
+              player vs computer
+            </v-btn>
+            <v-btn text value="player-player">
+              player vs player
+            </v-btn>
+          </v-btn-toggle>
+        </v-flex>
         <v-flex class="button-container">
           <v-btn @click="emptyBoard">Empty board</v-btn>
         </v-flex>
@@ -40,6 +51,11 @@ export const algorithmsTypes = {
   MIN_MAX_A_B: 'min-max (alpha-beta pruning)',
 }
 
+export const playerMode = {
+  PLAYER_COMPUTER: 'player-computer',
+  PLAYER_PLAYER: 'player-player',
+}
+
 export default {
   components: {
     Board
@@ -48,6 +64,13 @@ export default {
     showTestOptions: {
       type: Boolean,
       required: true,
+    },
+    playerMode: {
+      type: String,
+      required: true,
+      validator: value => {
+        return value && [playerMode.PLAYER_COMPUTER, playerMode.PLAYER_PLAYER].includes(value)
+      },
     },
     boardSizeSelected: {
       type: Number,
@@ -129,6 +152,9 @@ export default {
     // changeBoardSize (size) {
     //   this.values = Array.from({length: size}, () => Array(size).fill(0))
     // },
+    changePlayerMode (mode) {
+      this.$emit('changePlayerMode', mode)
+    },
     changeToWhite () {
       this.currentColor = 1
     },
@@ -146,6 +172,11 @@ export default {
         console.log(`white points: ${whitePoints}, black points: ${blackPoints}`)
         this.onFinishGame(whitePoints, blackPoints)
       } else {
+        if (this.playerMode === playerMode.PLAYER_PLAYER) {
+          this.currentColor = this.currentColor === 1 ? 2 : 1
+          return;
+        }
+
         let valuesToCalculate = valuesToOperate.map(arr => arr.slice())
 
         const opponentColor = this.currentColor === 1 ? 2 : 1
