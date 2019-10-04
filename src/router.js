@@ -6,7 +6,7 @@ import Preferences from './views/Preferences.vue'
 Vue.use(Router)
 
 export default new Router({
-  // mode: 'history',
+  // mode: 'history', // History mode is disabled as on Github redirection from other url to index.html is not handled 
   routes: [
     {
       path: '/',
@@ -16,10 +16,6 @@ export default new Router({
     {
       path: '/preferences',
       name: 'preferences',
-      // route level code-splitting
-      // this generates a separate chunk (preferences.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      // component: () => import(/* webpackChunkName: "preferences" */ './views/Preferences.vue')
       component: Preferences
     }
   ]
