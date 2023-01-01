@@ -107,7 +107,7 @@
 <h2>Contact Us</h2>
 <p>If you have any questions about this Privacy Policy, please contact us:</p>
 <ul>
-<li>By email: tarasiukdawid@gmail.com</li>
+<li>By email: contact@learntray.com</li>
   
 </ul>
 </div>
